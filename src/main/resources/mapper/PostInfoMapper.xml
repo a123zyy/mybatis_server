@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.PostInfoMapper">
+  <resultMap id="BaseResultMap" type="com.example.bean.PostInfo">
+    <!--@mbg.generated-->
+    <!--@Table post_info-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="post_content" jdbcType="VARCHAR" property="postContent" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="post_type" jdbcType="INTEGER" property="postType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="label_id" jdbcType="INTEGER" property="labelId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, post_content, post_name, post_type, create_time, `status`, user_id, label_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from post_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from post_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.bean.PostInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into post_info (post_content, post_name, post_type, 
+      create_time, `status`, user_id, 
+      label_id)
+    values (#{postContent,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{postType,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{labelId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.bean.PostInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into post_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="postContent != null">
+        post_content,
+      </if>
+      <if test="postName != null">
+        post_name,
+      </if>
+      <if test="postType != null">
+        post_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="labelId != null">
+        label_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="postContent != null">
+        #{postContent,jdbcType=VARCHAR},
+      </if>
+      <if test="postName != null">
+        #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="postType != null">
+        #{postType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="labelId != null">
+        #{labelId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.bean.PostInfo">
+    <!--@mbg.generated-->
+    update post_info
+    <set>
+      <if test="postContent != null">
+        post_content = #{postContent,jdbcType=VARCHAR},
+      </if>
+      <if test="postName != null">
+        post_name = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="postType != null">
+        post_type = #{postType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="labelId != null">
+        label_id = #{labelId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.bean.PostInfo">
+    <!--@mbg.generated-->
+    update post_info
+    set post_content = #{postContent,jdbcType=VARCHAR},
+      post_name = #{postName,jdbcType=VARCHAR},
+      post_type = #{postType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      label_id = #{labelId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="findAllByStatus" resultType="int">
+        select count(*) from post_info where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findAllByUserId" resultMap="BaseResultMap">
+        select * from post_info where user_id = #{user_id,jdbcType=INTEGER}
+    </select>
+</mapper>
