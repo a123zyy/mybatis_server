@@ -11,11 +11,12 @@
     <result column="lastTime" jdbcType="TIMESTAMP" property="lasttime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="roleid" jdbcType="INTEGER" property="roleid" />
     <result column="phone_num" jdbcType="INTEGER" property="phoneNum" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, username, `password`, `type`, lastTime, `status`, userid, phone_num
+    id, username, `password`, `type`, lastTime, `status`, userid, roleid, phone_num
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -33,10 +34,10 @@
     <!--@mbg.generated-->
     insert into login_info (username, `password`, `type`, 
       lastTime, `status`, userid, 
-      phone_num)
+      roleid, phone_num)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
       #{lasttime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
-      #{phoneNum,jdbcType=INTEGER})
+      #{roleid,jdbcType=INTEGER}, #{phoneNum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.bean.LoginInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -60,6 +61,9 @@
       <if test="userid != null">
         userid,
       </if>
+      <if test="roleid != null">
+        roleid,
+      </if>
       <if test="phoneNum != null">
         phone_num,
       </if>
@@ -82,6 +86,9 @@
       </if>
       <if test="userid != null">
         #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="roleid != null">
+        #{roleid,jdbcType=INTEGER},
       </if>
       <if test="phoneNum != null">
         #{phoneNum,jdbcType=INTEGER},
@@ -110,6 +117,9 @@
       <if test="userid != null">
         userid = #{userid,jdbcType=INTEGER},
       </if>
+      <if test="roleid != null">
+        roleid = #{roleid,jdbcType=INTEGER},
+      </if>
       <if test="phoneNum != null">
         phone_num = #{phoneNum,jdbcType=INTEGER},
       </if>
@@ -125,6 +135,7 @@
       lastTime = #{lasttime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=VARCHAR},
       userid = #{userid,jdbcType=INTEGER},
+      roleid = #{roleid,jdbcType=INTEGER},
       phone_num = #{phoneNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

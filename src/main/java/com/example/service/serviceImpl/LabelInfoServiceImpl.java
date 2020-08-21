@@ -6,6 +6,7 @@ import com.example.service.LabelInfoService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class LabelInfoServiceImpl implements LabelInfoService {
@@ -44,8 +45,13 @@ public class LabelInfoServiceImpl implements LabelInfoService {
     }
 
     @Override
-    public int countAllByStatus(int status) {
-        return labelInfoMapper.findAllByStatus(status);
+    public int countAllByStatus(int status,int userId) {
+        return labelInfoMapper.findAllByStatus(status,userId);
+    }
+
+    @Override
+    public List<LabelInfo> findAllByLabel(int status) {
+        return labelInfoMapper.findAllByLabel(status);
     }
 
 }

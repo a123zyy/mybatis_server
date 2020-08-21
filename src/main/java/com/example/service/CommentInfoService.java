@@ -19,11 +19,14 @@ public interface CommentInfoService {
 
     int updateByPrimaryKey(CommentInfo record);
 
-    int findAllByStatus(int status);
+    int findByUserId(int status);
 
     List<CommentInfo> findAllByPostId(int postId);
 
-    List<CommentInfo> findAllByParentId(int parentId);
+    Integer findByPostId(int postId);
+
+    CommentInfo findByParentId(int parentId);
+
 
 
 }

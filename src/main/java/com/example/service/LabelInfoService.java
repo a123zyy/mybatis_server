@@ -2,6 +2,8 @@ package com.example.service;
 
 import com.example.bean.LabelInfo;
 
+import java.util.List;
+
 public interface LabelInfoService {
 
 
@@ -17,7 +19,10 @@ public interface LabelInfoService {
 
     int updateByPrimaryKey(LabelInfo record);
 
-    int countAllByStatus(int status);
+    int countAllByStatus(int status,int userId);
+
+    List<LabelInfo> findAllByLabel(int status);
+
 
 }
 

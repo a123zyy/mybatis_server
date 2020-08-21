@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.bean.CommentInfo;
 import com.example.bean.PostInfo;
 
 import java.util.List;
@@ -19,9 +20,13 @@ public interface PostInfoService {
 
     int updateByPrimaryKey(PostInfo record);
 
-    int findAllByStatus(int status);
+    List<PostInfo> findbyUserId(int userId);
 
-    PostInfo findAllByUserId(int userId);
+    List<PostInfo> findAllByUserId(int userId);
+
+    List<PostInfo> findAllByStatus(int status);
+
+
 
 }
 

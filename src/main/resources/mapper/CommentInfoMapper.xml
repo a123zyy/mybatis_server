@@ -128,13 +128,16 @@
       `status` = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <select id="findAllByStatus" resultType="java.lang.Integer">
-        select count(*) from comment_info where status = #{status,jdbcType=INTEGER}
-    </select>
     <select id="findAllByPostId" resultMap="BaseResultMap">
         select * from comment_info where post_id = #{postId,jdbcType=INTEGER}
     </select>
-    <select id="findAllByParentId" resultMap="BaseResultMap">
+    <select id="findByParentId" resultMap="BaseResultMap">
         select * from comment_info where parent_id = #{parentId,jdbcType=INTEGER}
+    </select>
+    <select id="findByUserId" resultType="java.lang.Integer">
+        select count(*) from comment_info where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="findByPostId" resultType="java.lang.Integer">
+        select count(*) from comment_info where post_id = #{postId,jdbcType=INTEGER}
     </select>
 </mapper>

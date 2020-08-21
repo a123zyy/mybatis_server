@@ -1,12 +1,14 @@
 package com.example.service.serviceImpl;
 
 
+import com.example.bean.CommentInfo;
 import com.example.bean.PostInfo;
 import com.example.dao.PostInfoMapper;
 import com.example.service.PostInfoService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class PostInfoServiceImpl implements PostInfoService {
@@ -45,13 +47,18 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
 
     @Override
-    public int findAllByStatus(int status) {
-        return postInfoMapper.findAllByStatus(status);
+    public List<PostInfo> findbyUserId(int userId) {
+        return postInfoMapper.findAllByUserId(userId);
     }
 
     @Override
-    public PostInfo findAllByUserId(int userId) {
+    public List<PostInfo> findAllByUserId(int userId) {
         return postInfoMapper.findAllByUserId(userId);
+    }
+
+    @Override
+    public List<PostInfo> findAllByStatus(int status) {
+        return postInfoMapper.findAllByStatus(status);
     }
 
 }

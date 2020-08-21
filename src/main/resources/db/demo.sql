@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : utf-8
 
- Date: 08/20/2020 18:46:38 PM
+ Date: 08/21/2020 18:30:25 PM
 */
 
 SET NAMES utf8mb4;
@@ -23,15 +23,22 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `comment_info`;
 CREATE TABLE `comment_info` (
   `id` int(32) NOT NULL AUTO_INCREMENT,
-  `user_id` int(8) NOT NULL COMMENT '发帖人id',
+  `user_id` int(8) NOT NULL COMMENT '发评论id',
   `parent_id` int(8) NOT NULL DEFAULT '0' COMMENT '父id',
   `comment_content` varchar(255) NOT NULL,
-  `post_id` int(8) NOT NULL,
-  `comment_name` varchar(32) NOT NULL,
-  `comment_head` varchar(32) NOT NULL,
+  `post_id` int(8) NOT NULL COMMENT '帖子id',
+  `comment_name` varchar(32) NOT NULL DEFAULT '' COMMENT '评论者name',
+  `comment_head` varchar(255) NOT NULL COMMENT '评论者头像',
   `status` int(2) DEFAULT '1' COMMENT '1正常 0不正常',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `comment_info`
+-- ----------------------------
+BEGIN;
+INSERT INTO `comment_info` VALUES ('1', '2', '0', '你说', '1', '绰6816', '0', '1'), ('2', '3', '1', '哈哈哈', '1', '胨6576', '11321', '1'), ('3', '1', '1', '有道理', '1', '羁3781', '23', '1'), ('4', '1', '0', '这是一条神奇的天路', '2', '羁3781', 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', '1');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `hobby_info`
@@ -43,13 +50,13 @@ CREATE TABLE `hobby_info` (
   `hobby` varchar(32) DEFAULT NULL,
   `status` int(11) DEFAULT '1' COMMENT '1正常  0不可用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `hobby_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `hobby_info` VALUES ('1', '1', '看书', '1');
+INSERT INTO `hobby_info` VALUES ('1', '1', '看书', '1'), ('2', '1', '看电影', '1');
 COMMIT;
 
 -- ----------------------------
@@ -81,7 +88,7 @@ CREATE TABLE `login_info` (
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `type` int(8) NOT NULL DEFAULT '1' COMMENT '1 密码验证码  2手机号登录   3第三方登录',
-  `lastTime` datetime DEFAULT NULL,
+  `lastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(255) DEFAULT '1' COMMENT '1 正常 0注销 ',
   `userid` int(11) DEFAULT '0' COMMENT '关联了用户表',
   `roleid` int(32) DEFAULT NULL,
@@ -93,7 +100,7 @@ CREATE TABLE `login_info` (
 --  Records of `login_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `login_info` VALUES ('1', 'root123', 'root123', '3', '2020-08-17 06:05:33', '1', '1', null, null), ('2', 'admin123', 'admin123', '2', '2020-08-14 11:13:42', '1', '2', null, null), ('3', '阿洋洋', '123456', '0', '2020-08-19 09:42:44', '1', '1', null, null);
+INSERT INTO `login_info` VALUES ('1', 'root123', 'root123', '0', '2020-08-21 05:44:33', null, '1', null, null), ('2', 'admin123', 'admin123', '0', '2020-08-21 03:41:04', null, '2', null, null), ('3', 'zyy123', 'zyy123', '0', '2020-08-21 03:41:21', null, '3', null, null);
 COMMIT;
 
 -- ----------------------------
@@ -105,12 +112,19 @@ CREATE TABLE `post_info` (
   `post_content` varchar(255) NOT NULL COMMENT '帖子 内容富文本',
   `post_name` varchar(32) NOT NULL COMMENT '帖子标题',
   `post_type` int(2) NOT NULL,
-  `create_time` datetime DEFAULT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` int(11) DEFAULT '1' COMMENT '0 删除 1可用',
   `user_id` int(32) DEFAULT NULL,
   `label_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `post_info`
+-- ----------------------------
+BEGIN;
+INSERT INTO `post_info` VALUES ('1', '大家好,这个是第一条的测试啊啊啊', '羁3781', '1', '2020-08-22 11:42:24', '1', '1', '1'), ('2', '你说的是个屁', '胨6576', '1', '2020-08-21 11:48:56', '1', '3', '0');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `user_info`
@@ -124,13 +138,13 @@ CREATE TABLE `user_info` (
   `phone` int(11) DEFAULT NULL,
   `comment` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `user_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_info` VALUES ('1', '阿洋洋', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~');
+INSERT INTO `user_info` VALUES ('1', '羁3781', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('2', '绰6816', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('3', '胨6576', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

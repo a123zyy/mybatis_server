@@ -19,9 +19,12 @@ public interface CommentInfoMapper {
 
     int updateByPrimaryKey(CommentInfo record);
 
-    Integer findAllByStatus(int status);
+    Integer findByUserId(int userId);
 
     List<CommentInfo> findAllByPostId(int postId);
 
-    List<CommentInfo> findAllByParentId(int parentId);
+    CommentInfo findByParentId(int parentId);
+
+    Integer findByPostId(int postId);
+
 }

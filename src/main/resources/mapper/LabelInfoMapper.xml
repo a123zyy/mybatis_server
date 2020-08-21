@@ -94,6 +94,9 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
     <select id="findAllByStatus" resultType="int">
-        select count(*) from label_info where status = #{status,jdbcType=INTEGER}
+        select count(*) from label_info where status = #{status,jdbcType=INTEGER} and user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="findAllByLabel" resultMap="BaseResultMap">
+        select * from label_info where status = #{status,jdbcType=INTEGER}
     </select>
 </mapper>

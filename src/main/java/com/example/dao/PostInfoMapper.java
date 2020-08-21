@@ -1,7 +1,7 @@
 package com.example.dao;
 
 import com.example.bean.PostInfo;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 @Mapper
 public interface PostInfoMapper {
@@ -17,7 +17,7 @@ public interface PostInfoMapper {
 
     int updateByPrimaryKey(PostInfo record);
 
-    int findAllByStatus(int status);
+    List<PostInfo> findAllByUserId(@Param("userId") int userId);
 
-    PostInfo findAllByUserId(int userId);
+    List<PostInfo> findAllByStatus(int status);
 }

@@ -128,10 +128,11 @@
       label_id = #{labelId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <select id="findAllByStatus" resultType="int">
-        select count(*) from post_info where id = #{id,jdbcType=INTEGER}
-    </select>
     <select id="findAllByUserId" resultMap="BaseResultMap">
-        select * from post_info where user_id = #{user_id,jdbcType=INTEGER}
+        select * from post_info where user_id = #{userId,jdbcType=INTEGER}
     </select>
+    <select id="findAllByStatus" resultMap="BaseResultMap">
+        select * from post_info where status = #{status,jdbcType=INTEGER}
+    </select>
+
 </mapper>

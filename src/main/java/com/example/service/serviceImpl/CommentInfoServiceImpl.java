@@ -45,8 +45,8 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     }
 
     @Override
-    public int findAllByStatus(int status) {
-        return commentInfoMapper.findAllByStatus(status);
+    public int findByUserId(int userId) {
+        return commentInfoMapper.findByUserId(userId);
     }
 
     @Override
@@ -55,9 +55,16 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     }
 
     @Override
-    public List<CommentInfo> findAllByParentId(int parentId) {
-      return commentInfoMapper.findAllByParentId(parentId);
+    public Integer findByPostId(int postId) {
+        return commentInfoMapper.findByPostId(postId);
     }
+
+    @Override
+    public CommentInfo findByParentId(int parentId) {
+      return commentInfoMapper.findByParentId(parentId);
+    }
+
+
 
 
 }

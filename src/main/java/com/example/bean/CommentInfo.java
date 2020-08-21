@@ -1,6 +1,8 @@
 package com.example.bean;
 
 import java.io.Serializable;
+
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 @Data

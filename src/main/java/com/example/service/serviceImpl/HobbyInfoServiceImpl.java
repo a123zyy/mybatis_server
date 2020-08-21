@@ -46,7 +46,7 @@ public class HobbyInfoServiceImpl implements HobbyInfoService{
 
     @Override
     public List<HobbyInfo> findAllByUserId(int UserId) {
-        return null;
+        return hobbyInfoMapper.findAllByUserId(UserId);
     }
 
 }

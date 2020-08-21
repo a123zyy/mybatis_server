@@ -1,4 +1,8 @@
 package com.example.pojo;
 
-public class UserInfoDto {
+import com.example.bean.UserInfo;
+import lombok.Data;
+
+@Data
+public class UserInfoDto extends UserInfo {
 }

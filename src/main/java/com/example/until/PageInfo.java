@@ -43,4 +43,7 @@ public class PageInfo<T> implements Serializable {
     private int navigateFirstPage;
     //导航条上的最后一页
     private int navigateLastPage;
+
+    public PageInfo(List<T> postInfoDtos) {
+    }
 }

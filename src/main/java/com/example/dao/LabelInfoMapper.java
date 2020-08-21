@@ -2,6 +2,9 @@ package com.example.dao;
 
 import com.example.bean.LabelInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface LabelInfoMapper {
@@ -17,5 +20,7 @@ public interface LabelInfoMapper {
 
     int updateByPrimaryKey(LabelInfo record);
 
-    int findAllByStatus(int status);
+    int findAllByStatus(@Param("status") int status,@Param("userId") int userId);
+
+    List<LabelInfo> findAllByLabel(int status);
 }

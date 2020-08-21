@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.bean.HobbyInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface HobbyInfoMapper {
 
     int updateByPrimaryKey(HobbyInfo record);
 
-    List<HobbyInfo> findAllByUserId(int UserId);
+    List<HobbyInfo> findAllByUserId(@Param("UserId") int UserId);
 }

@@ -29,6 +29,8 @@ public class LoginInfo implements Serializable {
      */
     private Integer userid;
 
+    private Integer roleid;
+
     private Integer phoneNum;
 
     private static final long serialVersionUID = 1L;
