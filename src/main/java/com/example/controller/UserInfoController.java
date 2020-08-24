@@ -16,7 +16,6 @@ import com.example.service.UserInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.GlobalnumInfo;
 import com.example.until.Result;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
