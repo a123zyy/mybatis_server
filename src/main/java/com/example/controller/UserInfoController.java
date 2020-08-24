@@ -14,6 +14,7 @@ import com.example.service.LabelInfoService;
 import com.example.service.PostInfoService;
 import com.example.service.UserInfoService;
 import com.example.until.ErroMsg;
+import com.example.until.GlobalnumInfo;
 import com.example.until.Result;
 import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
@@ -50,7 +51,7 @@ public class UserInfoController {
     @RequestMapping(value = "/homeList",method = RequestMethod.POST)
     public Result getHome(int userId){
         Map<String,Object> map = new HashMap<String, Object>();
-        if (userId == 0 || StringUtils.isEmpty(userId)){
+        if (userId == GlobalnumInfo.NO_ASABLE.Key|| StringUtils.isEmpty(userId)){
             return Result.error(ErroMsg.REDIS_NULL_ERROR);
         }
         UserInfo userInfo =  userInfoService.selectByPrimaryKey(1);
@@ -66,7 +67,7 @@ public class UserInfoController {
        }).collect(Collectors.toList());
        map.put("hobbyInfo",list1);
        //根据userid 查询标签总数
-       Integer labelCount = labelInfoService.countAllByStatus(1,1);
+       Integer labelCount = labelInfoService.countAllByStatus(GlobalnumInfo.IS_ASABLE.Key,1);
        map.put("labelCount",labelCount);
        //根据userid 查询帖子总数
         List<PostInfo> postInfos = postInfoService.findbyUserId(1);
@@ -81,7 +82,7 @@ public class UserInfoController {
             map.put("labelName",labelInfo.getLable());
             //根据postid查出所有的评论list
             List<CommentInfo> commentInfos = commentInfoService.findAllByPostId(postInfoDto.getId());
-          if (!StringUtils.isEmpty(commentInfos) && commentInfos.size()>0){
+          if (!StringUtils.isEmpty(commentInfos) && commentInfos.size()>GlobalnumInfo.NO_ASABLE.Key){
             List<CommentInfoDto> commentInfoDtos = commentInfos.stream().map(item->{
               CommentInfoDto commentInfoDto = new CommentInfoDto();
               BeanUtils.copyProperties(item,commentInfoDto);
@@ -100,7 +101,7 @@ public class UserInfoController {
         List<CommentInfoDto> dtoList = new ArrayList<>();
          for (CommentInfoDto commentInfoDto:commentInfoDtos){
              //父评论为0是第一条
-            if (commentInfoDto.getParentId() == 0){
+            if (commentInfoDto.getParentId() == GlobalnumInfo.NO_ASABLE.Key){
                 List<CommentInfoDto> commentInfoDtos1 = new ArrayList<>();
                 for (int i = 0;i <commentInfoDtos.size();i++){
                     if(commentInfoDto.getId().equals(commentInfoDtos.get(i).getParentId())){
