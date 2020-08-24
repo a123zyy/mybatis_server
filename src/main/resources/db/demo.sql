@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : utf-8
 
- Date: 08/21/2020 18:30:25 PM
+ Date: 08/24/2020 18:33:47 PM
 */
 
 SET NAMES utf8mb4;
@@ -87,7 +87,7 @@ CREATE TABLE `login_info` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `type` int(8) NOT NULL DEFAULT '1' COMMENT '1 密码验证码  2手机号登录   3第三方登录',
+  `login_type` int(8) NOT NULL DEFAULT '1' COMMENT '1 密码验证码  2手机号登录   3第三方登录',
   `lastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(255) DEFAULT '1' COMMENT '1 正常 0注销 ',
   `userid` int(11) DEFAULT '0' COMMENT '关联了用户表',
@@ -100,7 +100,7 @@ CREATE TABLE `login_info` (
 --  Records of `login_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `login_info` VALUES ('1', 'root123', 'root123', '0', '2020-08-21 05:44:33', null, '1', null, null), ('2', 'admin123', 'admin123', '0', '2020-08-21 03:41:04', null, '2', null, null), ('3', 'zyy123', 'zyy123', '0', '2020-08-21 03:41:21', null, '3', null, null);
+INSERT INTO `login_info` VALUES ('1', 'root123', 'root123', '0', '2020-08-24 10:30:00', null, '1', null, null), ('2', 'admin123', 'admin123', '0', '2020-08-21 03:41:04', null, '2', null, null), ('3', 'zyy123', 'zyy123', '0', '2020-08-21 03:41:21', null, '3', null, null);
 COMMIT;
 
 -- ----------------------------
@@ -123,7 +123,7 @@ CREATE TABLE `post_info` (
 --  Records of `post_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `post_info` VALUES ('1', '大家好,这个是第一条的测试啊啊啊', '羁3781', '1', '2020-08-22 11:42:24', '1', '1', '1'), ('2', '你说的是个屁', '胨6576', '1', '2020-08-21 11:48:56', '1', '3', '0');
+INSERT INTO `post_info` VALUES ('1', '大家好,这个是第一条的测试啊啊啊', '羁3781', '1', '2020-08-22 11:42:24', '1', '1', '1'), ('2', '你说的是个屁', '胨6576', '1', '2020-08-21 11:48:56', '1', '3', '1');
 COMMIT;
 
 -- ----------------------------
