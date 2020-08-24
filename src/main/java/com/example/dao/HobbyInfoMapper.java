@@ -1,6 +1,7 @@
 package com.example.dao;
 
 import com.example.bean.HobbyInfo;
+import com.example.bean.LabelInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +22,10 @@ public interface HobbyInfoMapper {
     int updateByPrimaryKey(HobbyInfo record);
 
     List<HobbyInfo> findAllByUserId(@Param("UserId") int UserId);
+
+    List<HobbyInfo> findAllByStatusAndUserid(@Param("status") int status, @Param("userId") int userId);
+
+    List<HobbyInfo> findAll();
+
+
 }

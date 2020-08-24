@@ -15,7 +15,7 @@ public class LoginInfo implements Serializable {
     /**
      * 1 密码验证码  2手机号登录   3第三方登录
      */
-    private Integer type;
+    private Integer loginType;
 
     private Date lasttime;
 

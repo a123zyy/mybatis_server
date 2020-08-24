@@ -61,6 +61,16 @@ public class PostInfoServiceImpl implements PostInfoService {
         return postInfoMapper.findAllByStatus(status);
     }
 
+    @Override
+    public List<PostInfo> finAll() {
+        return postInfoMapper.findAll();
+    }
+
+    @Override
+    public List<PostInfo> findAllByStatusAndLabelId(int status, int labelId) {
+        return postInfoMapper.findAllByStatusAndLabelId(status, labelId);
+    }
+
 }
 
 

@@ -20,4 +20,8 @@ public interface PostInfoMapper {
     List<PostInfo> findAllByUserId(@Param("userId") int userId);
 
     List<PostInfo> findAllByStatus(int status);
+
+    List<PostInfo> findAll();
+
+    List<PostInfo> findAllByStatusAndLabelId(@Param("status") int status, @Param("labelId") int labelId);
 }

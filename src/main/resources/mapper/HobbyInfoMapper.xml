@@ -85,4 +85,10 @@
     <select id="findAllByUserId" resultMap="BaseResultMap">
         select * from hobby_info where user_id = #{UserId,jdbcType=INTEGER}
     </select>
+    <select id="findAllByStatusAndUserid" resultMap="BaseResultMap">
+        select * from hobby_info where status = #{status,jdbcType=INTEGER} and user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="findAll" resultMap="BaseResultMap">
+        select * from hobby_info
+    </select>
 </mapper>

@@ -28,7 +28,7 @@ public class LabelInfoController {
 
     @RequestMapping(value = "/LabelInfo",method = RequestMethod.GET)
     public Result getLabelInfoAll(){
-       List<LabelInfo> labelInfos = labelInfoService.findAllByLabel(GlobalnumInfo.IS_ASABLE.Key);
+        List<LabelInfo> labelInfos = labelInfoService.findAllByStatus(GlobalnumInfo.IS_ASABLE.Key);
        List<LabelInfoDto> labelInfoDtos = labelInfos.stream().map(item->{
            LabelInfoDto labelInfoDto =new LabelInfoDto();
            BeanUtils.copyProperties(item,labelInfoDto);

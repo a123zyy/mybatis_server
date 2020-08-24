@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.bean.CommentInfo;
 import com.example.bean.PostInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,6 +26,11 @@ public interface PostInfoService {
     List<PostInfo> findAllByUserId(int userId);
 
     List<PostInfo> findAllByStatus(int status);
+
+    List<PostInfo> finAll();
+
+    List<PostInfo> findAllByStatusAndLabelId(@Param("status") int status, @Param("labelId") int labelId);
+
 
 
 

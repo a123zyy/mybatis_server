@@ -7,7 +7,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="type" jdbcType="INTEGER" property="type" />
+      <result column="login_type" jdbcType="INTEGER" property="loginType"/>
     <result column="lastTime" jdbcType="TIMESTAMP" property="lasttime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="userid" jdbcType="INTEGER" property="userid" />
@@ -16,7 +16,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, username, `password`, `type`, lastTime, `status`, userid, roleid, phone_num
+      id, username, `password`, login_type, lastTime, `status`, userid, roleid, phone_num
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -32,10 +32,10 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.bean.LoginInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into login_info (username, `password`, `type`, 
+      insert into login_info (username, `password`, login_type,
       lastTime, `status`, userid, 
       roleid, phone_num)
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{loginType,jdbcType=INTEGER},
       #{lasttime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
       #{roleid,jdbcType=INTEGER}, #{phoneNum,jdbcType=INTEGER})
   </insert>
@@ -49,8 +49,8 @@
       <if test="password != null">
         `password`,
       </if>
-      <if test="type != null">
-        `type`,
+        <if test="loginType != null">
+            login_type,
       </if>
       <if test="lasttime != null">
         lastTime,
@@ -75,8 +75,8 @@
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
+        <if test="loginType != null">
+            #{loginType,jdbcType=INTEGER},
       </if>
       <if test="lasttime != null">
         #{lasttime,jdbcType=TIMESTAMP},
@@ -105,8 +105,8 @@
       <if test="password != null">
         `password` = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        `type` = #{type,jdbcType=INTEGER},
+        <if test="loginType != null">
+            login_type = #{loginType,jdbcType=INTEGER},
       </if>
       <if test="lasttime != null">
         lastTime = #{lasttime,jdbcType=TIMESTAMP},
@@ -131,7 +131,7 @@
     update login_info
     set username = #{username,jdbcType=VARCHAR},
       `password` = #{password,jdbcType=VARCHAR},
-      `type` = #{type,jdbcType=INTEGER},
+      login_type = #{loginType,jdbcType=INTEGER},
       lastTime = #{lasttime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=VARCHAR},
       userid = #{userid,jdbcType=INTEGER},

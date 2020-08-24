@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.bean.UserInfo;
+import com.example.until.Result;
 
 public interface UserInfoService{
 
@@ -17,6 +18,9 @@ public interface UserInfoService{
 
     int updateByPrimaryKey(UserInfo record);
 
+    Result findAllBy(int pageSize, int pageNum);
+
+    Integer countByNickname(String nickName);
 
 
 

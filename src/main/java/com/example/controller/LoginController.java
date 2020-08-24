@@ -6,6 +6,7 @@ import com.example.pojo.LoginDto;
 import com.example.service.LoginInfoService;
 import com.example.service.UserInfoService;
 import com.example.until.ErroMsg;
+import com.example.until.GlobalUntil;
 import com.example.until.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,7 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 
 @RequestMapping("/login")
 @RestController
@@ -88,9 +88,11 @@ public class LoginController {
         int update = loginInfoService.updateByPrimaryKeySelective(loginInfo);
         Map<String,Object> userMap =new HashMap<>();
         if (update > 0){
+            userMap.put("token", GlobalUntil.getUUID());
             userMap.put("userInfo",userInfoService.selectByPrimaryKey(list.getUserid()));
             return Result.success(userMap);
         }
+
         return Result.error(ErroMsg.REDIS_NULL_ERROR);
     }
     //注册

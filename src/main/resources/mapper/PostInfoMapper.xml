@@ -134,5 +134,11 @@
     <select id="findAllByStatus" resultMap="BaseResultMap">
         select * from post_info where status = #{status,jdbcType=INTEGER}
     </select>
+    <select id="findAll" resultMap="BaseResultMap">
+        select * from post_info
+    </select>
+    <select id="findAllByStatusAndLabelId" resultMap="BaseResultMap">
+        select * from post_info where status = #{status,jdbcType=INTEGER} and label_id = #{labelId,jdbcType=INTEGER}
+    </select>
 
 </mapper>

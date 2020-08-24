@@ -1,5 +1,6 @@
 package com.example.service.serviceImpl;
 
+import com.example.until.Result;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.example.bean.HobbyInfo;
@@ -47,6 +48,23 @@ public class HobbyInfoServiceImpl implements HobbyInfoService{
     @Override
     public List<HobbyInfo> findAllByUserId(int UserId) {
         return hobbyInfoMapper.findAllByUserId(UserId);
+    }
+
+    @Override
+    public List<HobbyInfo> findAllByStatusAndUserid(int status, int userId) {
+        return hobbyInfoMapper.findAllByStatusAndUserid(status, userId);
+    }
+
+    @Override
+    public Result getAll() {
+        return Result.success(hobbyInfoMapper.findAll());
+    }
+
+    @Override
+    public Result hobbyDelete(int id, int status) {
+        HobbyInfo hobbyInfo = hobbyInfoMapper.selectByPrimaryKey(id);
+        hobbyInfo.setStatus(status);
+        return Result.success(hobbyInfoMapper.updateByPrimaryKeySelective(hobbyInfo));
     }
 
 }

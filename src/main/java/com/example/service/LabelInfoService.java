@@ -21,7 +21,13 @@ public interface LabelInfoService {
 
     int countAllByStatus(int status,int userId);
 
-    List<LabelInfo> findAllByLabel(int status);
+    List<LabelInfo> findAllByStatus(int status);
+
+    List<LabelInfo> findAll();
+
+    int labelDelete(int id, int status);
+
+
 
 
 }

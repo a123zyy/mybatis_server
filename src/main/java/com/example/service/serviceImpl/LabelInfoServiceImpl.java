@@ -46,13 +46,26 @@ public class LabelInfoServiceImpl implements LabelInfoService {
 
     @Override
     public int countAllByStatus(int status,int userId) {
-        return labelInfoMapper.findAllByStatus(status,userId);
+        return labelInfoMapper.countAllByStatus(status, userId);
     }
 
     @Override
-    public List<LabelInfo> findAllByLabel(int status) {
-        return labelInfoMapper.findAllByLabel(status);
+    public List<LabelInfo> findAllByStatus(int status) {
+        return labelInfoMapper.SelectAllByStatus(status);
     }
+
+    @Override
+    public List<LabelInfo> findAll() {
+        return labelInfoMapper.findAll();
+    }
+
+    @Override
+    public int labelDelete(int id, int status) {
+        LabelInfo labelInfo = labelInfoMapper.selectByPrimaryKey(id);
+        labelInfo.setStatus(status);
+        return labelInfoMapper.updateByPrimaryKeySelective(labelInfo);
+    }
+
 
 }
 

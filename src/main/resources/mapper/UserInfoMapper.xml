@@ -110,4 +110,10 @@
     <select id="findById" resultMap="BaseResultMap">
         select * from user_info where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="findAll" resultMap="BaseResultMap">
+        select * from user_info
+    </select>
+    <select id="countByNickName" resultType="int">
+        select count(1) from user_info where nickname = #{nickname,jdbcType=VARCHAR}
+    </select>
 </mapper>

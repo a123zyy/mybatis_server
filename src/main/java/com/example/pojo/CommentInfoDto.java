@@ -7,6 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
+
 public class CommentInfoDto extends CommentInfo {
     private Integer id;
     @JSONField(serialize=false)

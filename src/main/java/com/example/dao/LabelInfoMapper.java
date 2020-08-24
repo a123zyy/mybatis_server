@@ -20,7 +20,9 @@ public interface LabelInfoMapper {
 
     int updateByPrimaryKey(LabelInfo record);
 
-    int findAllByStatus(@Param("status") int status,@Param("userId") int userId);
+    int countAllByStatus(@Param("status") int status, @Param("userId") int userId);
 
-    List<LabelInfo> findAllByLabel(int status);
+    List<LabelInfo> SelectAllByStatus(int status);
+
+    List<LabelInfo> findAll();
 }
