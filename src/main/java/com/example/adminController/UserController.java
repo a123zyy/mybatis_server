@@ -15,12 +15,12 @@ public class UserController {
     @Autowired
     public UserInfoService userInfoService;
 
-    @RequestMapping(value = "getAll", method = RequestMethod.POST)
+    @RequestMapping(value = "UserList", method = RequestMethod.POST)
     public Result getAllUser(int pageSize, int pageNum) {
         return Result.success(userInfoService.findAllBy(pageSize, pageNum));
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "user", method = RequestMethod.PUT)
     public Result getAllUser(@RequestBody UserInfoDto userInfoDto) {
         if (StringUtils.isEmpty(userInfoDto)) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);

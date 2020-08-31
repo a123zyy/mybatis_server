@@ -11,6 +11,8 @@ import com.example.until.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +26,7 @@ public class LabelController {
     public LabelInfoService labelInfoService;
 
 
-    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "labelList", method = RequestMethod.GET)
     public Result getAll() {
         List<LabelInfo> labelInfos = labelInfoService.findAll();
         List<LabelInfoDto> labelInfoDtos = labelInfos.stream().map(item -> {
@@ -36,7 +38,7 @@ public class LabelController {
 
     }
 
-    @RequestMapping(value = "hobbyInsert", method = RequestMethod.POST)
+    @RequestMapping(value = "label", method = RequestMethod.POST)
     public Result hobbyInsert(@RequestBody LabelInfoDto labelInfoDto) {
         if (StringUtils.isEmpty(labelInfoDto)) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
@@ -50,7 +52,7 @@ public class LabelController {
 
     }
 
-    @RequestMapping(value = "labelInsert", method = RequestMethod.POST)
+    @RequestMapping(value = "label", method = RequestMethod.PUT)
     public Result LabelUpdate(@RequestBody LabelInfoDto labelInfoDto) {
         if (StringUtils.isEmpty(labelInfoDto)) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
@@ -64,8 +66,8 @@ public class LabelController {
 
     }
 
-    @RequestMapping(value = "labelDelete", method = RequestMethod.GET)
-    public Result labelDelete(int id, int status) {
+    @GetMapping(value = "label/{id}/{status}")
+    public Result labelDelete(@PathVariable int id, @PathVariable int status) {
         return Result.success(labelInfoService.labelDelete(id, status));
 
     }

@@ -1,7 +1,7 @@
 package com.example.pojo;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.example.bean.CommentInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CommentInfoDto extends CommentInfo {
     private Integer id;
-    @JSONField(serialize=false)
+    @JsonIgnore
     private Integer status;
 
     private List<CommentInfoDto> children;

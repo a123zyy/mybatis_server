@@ -1,8 +1,11 @@
 package com.example.demo;
 
+import com.example.bean.HobbyInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -23,13 +26,20 @@ class MybatisServerApplicationTests {
 
     @Test
     void contextLoads11() {
+        String name = "爱好,好好,乌拉,";
+        System.out.println(name.substring(0,name.length()-1));
 
-        System.out.println(getUUID());
     }
 
     public String getUUID() {
         String s = UUID.randomUUID().toString();
         return s.replace("-", "");
+    }
+    public String gethobbyInfo(String hobbyInfo) {
+
+
+        return hobbyInfo;
+
     }
 
 //    String s = UUID.randomUUID().toString();

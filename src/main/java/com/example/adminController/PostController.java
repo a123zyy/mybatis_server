@@ -30,7 +30,7 @@ public class PostController {
     @Autowired
     public LabelInfoService labelInfoService;
 
-    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "postList", method = RequestMethod.GET)
     public Result getALL(int pageSize, int PageNum) {
         PageHelper.startPage(PageNum, pageSize);
         List<PostInfo> postInfos = postInfoService.finAll();
@@ -49,7 +49,7 @@ public class PostController {
         return Result.success(postInfoDtolist);
     }
 
-    @RequestMapping(value = "InsertPost", method = RequestMethod.POST)
+    @RequestMapping(value = "PostInfo", method = RequestMethod.POST)
     public Result InsertPost(@RequestBody PostInfoDto postInfoDto) {
         if (StringUtils.isEmpty(postInfoDto)) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
@@ -68,7 +68,7 @@ public class PostController {
         return Result.success(postInfoService.insertSelective(postInfo));
     }
 
-    @RequestMapping(value = "InsertPost", method = RequestMethod.GET)
+    @RequestMapping(value = "PostInfo", method = RequestMethod.PUT)
     public Result updateStatus(int id, int status) {
         if (id == 0) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);

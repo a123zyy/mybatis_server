@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-@RequestMapping("/login")
+@RequestMapping("/web/login")
 @RestController
 @Api(value = "/login", tags = {"登录"})
 @Slf4j
@@ -46,7 +46,7 @@ public class LoginController {
     @Autowired
     public LoginInfoService loginInfoService;
 
-    @RequestMapping(value = "/tologin",method = RequestMethod.POST)
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public Result getLogin(@RequestBody LoginDto loginDto){
         if (StringUtils.isEmpty(loginDto.getUsername())||StringUtils.isEmpty(loginDto.getPassword())){
             throw new UnknownAccountException("用户名或密码为空");

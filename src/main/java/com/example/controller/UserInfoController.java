@@ -13,7 +13,9 @@ import com.example.service.HobbyInfoService;
 import com.example.service.LabelInfoService;
 import com.example.service.PostInfoService;
 import com.example.service.UserInfoService;
+import com.example.service.serviceImpl.UserInfoServiceImpl;
 import com.example.until.ErroMsg;
+import com.example.until.GlobalUntil;
 import com.example.until.GlobalnumInfo;
 import com.example.until.Result;
 import org.springframework.beans.BeanUtils;
@@ -32,7 +34,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/web/user")
 public class UserInfoController {
     @Autowired
     public UserInfoService userInfoService;
@@ -47,7 +49,7 @@ public class UserInfoController {
 
 
     //返回首页信息
-    @RequestMapping(value = "/homeList",method = RequestMethod.POST)
+    @RequestMapping(value = "/homeList",method = RequestMethod.GET)
     public Result getHome(int userId){
         Map<String,Object> map = new HashMap<String, Object>();
         if (userId == GlobalnumInfo.NO_ASABLE.Key|| StringUtils.isEmpty(userId)){
@@ -59,41 +61,13 @@ public class UserInfoController {
         map.put("userInfo",userInfoDto);
        //根据userid查询爱好
        List<HobbyInfo> list = hobbyInfoService.findAllByUserId(1);
-       List<HobbyInfoDto> list1 = list.stream().map(item->{
-           HobbyInfoDto hobbyInfoDto = new HobbyInfoDto();
-           BeanUtils.copyProperties(item,hobbyInfoDto);
-           return hobbyInfoDto;
-       }).collect(Collectors.toList());
-       map.put("hobbyInfo",list1);
+       map.put("hobbyInfo",GlobalUntil.gethobbyInfo(list));
        //根据userid 查询标签总数
        Integer labelCount = labelInfoService.countAllByStatus(GlobalnumInfo.IS_ASABLE.Key,1);
        map.put("labelCount",labelCount);
        //根据userid 查询帖子总数
         List<PostInfo> postInfos = postInfoService.findbyUserId(1);
         map.put("postCount",this.getcommentCount(postInfos));
-        //根据userid 查询标签总数 第一条帖子和评论
-        PostInfo postInfo = postInfoService.selectByPrimaryKey(1);
-        PostInfoDto postInfoDto =new PostInfoDto();
-        BeanUtils.copyProperties(postInfo,postInfoDto);
-        if (!StringUtils.isEmpty(postInfoDto)){
-            //根据labelid查询labelname
-            LabelInfo labelInfo = labelInfoService.selectByPrimaryKey(postInfoDto.getLabelId());
-            map.put("labelName",labelInfo.getLable());
-            //根据postid查出所有的评论list
-            List<CommentInfo> commentInfos = commentInfoService.findAllByPostId(postInfoDto.getId());
-          if (!StringUtils.isEmpty(commentInfos) && commentInfos.size()>GlobalnumInfo.NO_ASABLE.Key){
-            List<CommentInfoDto> commentInfoDtos = commentInfos.stream().map(item->{
-              CommentInfoDto commentInfoDto = new CommentInfoDto();
-              BeanUtils.copyProperties(item,commentInfoDto);
-                             return commentInfoDto;
-            }).collect(Collectors.toList());
-
-            postInfoDto.setCommentInfoDtos(this.getChildren(commentInfoDtos));
-            map.put("post",postInfoDto);
-          }
-
-        return Result.success(map);
-    }
         return Result.success(map);
     }
     public List<CommentInfoDto> getChildren(List<CommentInfoDto> commentInfoDtos){
@@ -124,5 +98,6 @@ public class UserInfoController {
         }
          return commentCount;
     }
+
 
 }

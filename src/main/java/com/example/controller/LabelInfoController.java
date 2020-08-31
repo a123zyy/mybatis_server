@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("/LabelInfo")
+@RequestMapping("/web/LabelInfo")
 @RestController
 @Api(value = "/LabelInfoController", tags = {"标签"})
 @Slf4j

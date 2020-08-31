@@ -8,6 +8,7 @@ import com.example.until.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,13 +19,13 @@ public class HobbyController {
     public HobbyInfoService hobbyInfoService;
 
 
-    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "hobbyList", method = RequestMethod.GET)
     public Result getAll() {
         return Result.success(hobbyInfoService.getAll());
 
     }
 
-    @RequestMapping(value = "hobbyInsert", method = RequestMethod.POST)
+    @RequestMapping(value = "hobby", method = RequestMethod.POST)
     public Result hobbyInsert(@RequestBody HobbyInfoDto hobbyInfoDto) {
         if (StringUtils.isEmpty(hobbyInfoDto)) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
@@ -38,7 +39,7 @@ public class HobbyController {
 
     }
 
-    @RequestMapping(value = "hobbyInsert", method = RequestMethod.POST)
+    @RequestMapping(value = "hobby", method = RequestMethod.PUT)
     public Result hobbyUpdate(@RequestBody HobbyInfoDto hobbyInfoDto) {
         if (StringUtils.isEmpty(hobbyInfoDto)) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
@@ -52,8 +53,8 @@ public class HobbyController {
 
     }
 
-    @RequestMapping(value = "hobbyDelete", method = RequestMethod.GET)
-    public Result hobbyDelete(int id, int status) {
+    @RequestMapping(value = "hobby/{id}/{status}", method = RequestMethod.GET)
+    public Result hobbyDelete(@PathVariable int id, @PathVariable int status) {
         return Result.success(hobbyInfoService.hobbyDelete(id, status));
 
     }

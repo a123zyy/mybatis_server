@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/CommentInfo")
+@RequestMapping("/web/CommentInfo")
 @RestController
 @Api(value = "/CommentInfoController", tags = {"评论"})
 @Slf4j
@@ -23,7 +23,7 @@ public class CommentInfoController {
     @Autowired
     public CommentInfoService commentInfoService;
 
-    @RequestMapping(value = "/addCommentInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/CommentInfo",method = RequestMethod.POST)
     public Result addCommentInfo(@RequestBody CommentInfoDto commentInfoDto){
       if (StringUtils.isEmpty(commentInfoDto)){
           return Result.error(ErroMsg.PARAMER_NULL_ERROR);

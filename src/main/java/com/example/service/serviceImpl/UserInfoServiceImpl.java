@@ -8,13 +8,14 @@ import com.example.pojo.UserInfoDto;
 import com.example.service.HobbyInfoService;
 import com.example.service.LabelInfoService;
 import com.example.service.UserInfoService;
+import com.example.until.GlobalUntil;
 import com.example.until.GlobalnumInfo;
 import com.example.until.PageInfo;
 import com.example.until.Result;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -69,7 +70,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             BeanUtils.copyProperties(item, userInfoDto);
             //根据userid查询爱好
             List<HobbyInfo> hobbyInfos = hobbyInfoService.findAllByStatusAndUserid(GlobalnumInfo.IS_ASABLE.Key, userInfoDto.getId());
-            userInfoDto.setHobbyName(this.gethobbyInfo(hobbyInfos));
+            userInfoDto.setHobbyName(GlobalUntil.gethobbyInfo(hobbyInfos));
             return userInfoDto;
         }).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo(list1);
@@ -81,16 +82,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoMapper.countByNickName(nickName);
     }
 
-    public String gethobbyInfo(List<HobbyInfo> hobbyInfos) {
-        String hobbyInfo = "";
-        for (HobbyInfo hobbyInfo1 : hobbyInfos) {
-            hobbyInfo += hobbyInfo1.getHobby() + ",";
-        }
-        if (!StringUtils.isEmpty(hobbyInfo)) {
-            hobbyInfo.substring(0, hobbyInfo.length() - 1);
-        }
-        return hobbyInfo;
 
-    }
+
 
 }

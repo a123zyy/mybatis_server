@@ -132,7 +132,7 @@
         select * from post_info where user_id = #{userId,jdbcType=INTEGER}
     </select>
     <select id="findAllByStatus" resultMap="BaseResultMap">
-        select * from post_info where status = #{status,jdbcType=INTEGER}
+        select * from post_info where status = #{status,jdbcType=INTEGER} order by create_time desc
     </select>
     <select id="findAll" resultMap="BaseResultMap">
         select * from post_info
