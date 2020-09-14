@@ -52,11 +52,11 @@ public class LoginController {
             throw new UnknownAccountException("用户名或密码为空");
         }
         //账户密码
-        if (loginDto.getType() == 1){
+        if (loginDto.getLoginType() == 1){
             Subject currentUser = SecurityUtils.getSubject();
             if (!currentUser.isAuthenticated()) {
                 try {
-                    currentUser.login(new UsernamePasswordToken(loginDto.getPassword(), loginDto.getPassword()));
+                    currentUser.login(new UsernamePasswordToken(loginDto.getUsername(), loginDto.getPassword()));
                 } catch (UnknownAccountException uae) {
                     log.info("There is no user with username of " + currentUser.getPrincipal());
                     throw new UnknownAccountException("用户名错误");
@@ -73,10 +73,11 @@ public class LoginController {
                 }
             }
             currentUser = SecurityUtils.getSubject();
-        } else if (loginDto.getType() == 2){
+            currentUser.isRemembered();
+        } else if (loginDto.getLoginType() == 2){
             //手机号
             return Result.success("");
-        } else if (loginDto.getType() == 3){
+        } else if (loginDto.getLoginType() == 3){
             //第三方
             return Result.success("");
         }
@@ -127,13 +128,19 @@ public class LoginController {
         loginInfo.setUserid(userid);
         return Result.success(loginInfoService.insert(loginInfo));
     }
-    //获取主页的信息 查到本人的信息  id为1的一条
-    public Result getToHome(){
+
+    @RequestMapping(value = "/logout",method = RequestMethod.POST)
+    public Result logout(){
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
         return Result.success("");
     }
+
     //随机生成汉字
     public char getRandomHan () {
         Random ran = new Random();
         return (char) (0x4e00 + ran.nextInt(DATA));
     }
+
+
 }

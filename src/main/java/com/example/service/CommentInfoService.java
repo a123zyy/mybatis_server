@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.bean.CommentInfo;
+import com.example.until.Result;
 
 import java.util.List;
 
@@ -11,7 +12,16 @@ public interface CommentInfoService {
 
     int insert(CommentInfo record);
 
-    int insertSelective(CommentInfo record);
+
+    /**
+     * 回复评论
+     * @param postId
+     * @param commentContent
+     * @param userId
+     * @param parentId
+     * @return Result
+     * */
+    Result insertSelective(int postId,String commentContent,int userId,int parentId);
 
     CommentInfo selectByPrimaryKey(Integer id);
 

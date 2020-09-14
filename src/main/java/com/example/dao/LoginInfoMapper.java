@@ -19,6 +19,8 @@ public interface LoginInfoMapper {
 
     List findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
+    List<LoginInfo> seachByUsername(@Param("username") String username);
+
     Integer findByUsername(String username);
 
     LoginInfo selectByUserName(String username);

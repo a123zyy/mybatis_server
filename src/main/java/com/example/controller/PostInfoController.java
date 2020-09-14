@@ -25,10 +25,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.swing.*;
+import java.applet.Applet;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequestMapping("/web/PostInfo")
@@ -43,7 +50,7 @@ public class PostInfoController {
     @Autowired
     public CommentInfoService commentInfoService;
 
-    @RequestMapping(value = "/List", method = RequestMethod.GET)
+    @RequestMapping(value = "/posts", method = RequestMethod.GET)
     @ApiOperation(value = "倒叙获得所有帖子", tags = {"倒叙获得所有帖子copy"}, notes = "分页必传")
     public Result getPostList(int pageSize, int pageNum){
         PageHelper.startPage(pageNum, pageSize);
@@ -51,6 +58,7 @@ public class PostInfoController {
         List<PostInfoDto> postInfoDtos = postInfos.stream().map(item->{
             PostInfoDto postInfoDto = new PostInfoDto();
             BeanUtils.copyProperties(item,postInfoDto);
+            postInfoDto.setTime(this.getCreateTime(item.getCreateTime()));
             LabelInfo labelInfo = labelInfoService.selectByPrimaryKey(postInfoDto.getLabelId());
             //返回评论数
             postInfoDto.setCommentCount(commentInfoService.findByPostId(postInfoDto.getId()));
@@ -64,7 +72,7 @@ public class PostInfoController {
                     BeanUtils.copyProperties(item1,commentInfoDto);
                     return commentInfoDto;
                 }).collect(Collectors.toList());
-                postInfoDto.setCommentInfoDtos(this.getChildren(commentInfoDtos));
+                //postInfoDto.setCommentInfoDtos(this.getChildren(commentInfoDtos));
             }
             return postInfoDto;
         }).collect(Collectors.toList());
@@ -72,29 +80,12 @@ public class PostInfoController {
         PageInfo<PostInfoDto> pageInfo = new PageInfo<>(postInfoDtos);
         return Result.success(pageInfo);
     }
-    @RequestMapping(value = "/List/Oneid", method = RequestMethod.GET)
-    public Result PostInfoByOneid(){
-                //根据userid 查询标签总数 第一条帖子和评论
-        PostInfo postInfo = postInfoService.selectByPrimaryKey(1);
-        PostInfoDto postInfoDto =new PostInfoDto();
-        BeanUtils.copyProperties(postInfo,postInfoDto);
-        if (!StringUtils.isEmpty(postInfoDto)){
-            //根据labelid查询labelname
-            LabelInfo labelInfo = labelInfoService.selectByPrimaryKey(postInfoDto.getLabelId());
-            postInfoDto.setLabelName(labelInfo.getLable());
-            //根据postid查出所有的评论list
-            List<CommentInfo> commentInfos = commentInfoService.findAllByPostId(postInfoDto.getId());
-            if (!StringUtils.isEmpty(commentInfos) && commentInfos.size()>GlobalnumInfo.NO_ASABLE.Key){
-            List<CommentInfoDto> commentInfoDtos = commentInfos.stream().map(item->{
-              CommentInfoDto commentInfoDto = new CommentInfoDto();
-              BeanUtils.copyProperties(item,commentInfoDto);
-                             return commentInfoDto;
-            }).collect(Collectors.toList());
 
-            postInfoDto.setCommentInfoDtos(this.getChildren(commentInfoDtos));
-          }
-        }
-        return Result.success(postInfoDto);
+
+    @RequestMapping(value = "/List/Oneid", method = RequestMethod.GET)
+    public Result PostInfoByOneid(HttpServletRequest httpServletRequest){
+                //根据userid 查询标签总数 第一条帖子和评论
+        return Result.success(postInfoService.findOnePostInfo(1,httpServletRequest.getHeader("uid")));
     }
 
     @RequestMapping(value = "/List/{labelId}", method = RequestMethod.GET)
@@ -119,22 +110,36 @@ public class PostInfoController {
         return Result.success(pageInfo);
     }
 
-    public List<CommentInfoDto> getChildren(List<CommentInfoDto> commentInfoDtos){
-        List<CommentInfoDto> dtoList = new ArrayList<>();
-        for (CommentInfoDto commentInfoDto:commentInfoDtos){
-            //父评论为0是第一条
-            if (commentInfoDto.getParentId() == GlobalnumInfo.NO_ASABLE.Key){
-                List<CommentInfoDto> commentInfoDtos1 = new ArrayList<>();
-                for (int i = 0;i <commentInfoDtos.size();i++){
-                    if(commentInfoDto.getId().equals(commentInfoDtos.get(i).getParentId())){
-                        commentInfoDtos1.add(commentInfoDtos.get(i));
-                    }
-                }
-                commentInfoDto.setChildren(commentInfoDtos1);
-                dtoList.add(commentInfoDto);
-            }
-        }
-        return  dtoList;
+    public String getCreateTime(Date timestamp){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long lt = new Long(timestamp.getTime());
+        Date date = new Date(lt);
+        String res = simpleDateFormat.format(date);
+        return res;
     }
+    /**
+     * @param userid
+     * @param postid
+     * @return Result
+     *
+     * */
+    @RequestMapping(value = "/giveLike", method = RequestMethod.GET)
+    @ApiOperation(value = "根据用户id和帖子id点赞", tags = {"倒叙获得所有帖子copy"}, notes = "参数必传")
+    public Result giveLike(int userid,int postid){
+       return Result.success(postInfoService.giveLike(userid,postid));
+    }
+    /**
+     * @param userid
+     * @param postid
+     * @return Result
+     *
+     * */
+    @RequestMapping(value = "/unGiveLike", method = RequestMethod.GET)
+    @ApiOperation(value = "根据用户id和帖子id取消点赞", tags = {"倒叙获得所有帖子copy"}, notes = "参数必传")
+    public Result unGiveLike(int userid,int postid){
+        return Result.success(postInfoService.unGiveLike(userid,postid));
+    }
+
+
 
 }

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/web/user")
@@ -48,8 +49,12 @@ public class UserInfoController {
     public CommentInfoService commentInfoService;
 
 
-    //返回首页信息
-    @RequestMapping(value = "/homeList",method = RequestMethod.GET)
+    /**
+     * 返回首页信息
+     * @param userId
+     * @return Result
+     * */
+    @RequestMapping(value = "/home",method = RequestMethod.GET)
     public Result getHome(int userId){
         Map<String,Object> map = new HashMap<String, Object>();
         if (userId == GlobalnumInfo.NO_ASABLE.Key|| StringUtils.isEmpty(userId)){
@@ -67,26 +72,24 @@ public class UserInfoController {
        map.put("labelCount",labelCount);
        //根据userid 查询帖子总数
         List<PostInfo> postInfos = postInfoService.findbyUserId(1);
-        map.put("postCount",this.getcommentCount(postInfos));
+        Stream.Builder<String> streamBuilder = Stream.builder();
+        postInfos.stream();
+        map.put("postCount", streamBuilder.build().collect(Collectors.joining(",")));
         return Result.success(map);
     }
-    public List<CommentInfoDto> getChildren(List<CommentInfoDto> commentInfoDtos){
-        List<CommentInfoDto> dtoList = new ArrayList<>();
-         for (CommentInfoDto commentInfoDto:commentInfoDtos){
-             //父评论为0是第一条
-            if (commentInfoDto.getParentId() == GlobalnumInfo.NO_ASABLE.Key){
-                List<CommentInfoDto> commentInfoDtos1 = new ArrayList<>();
-                for (int i = 0;i <commentInfoDtos.size();i++){
-                    if(commentInfoDto.getId().equals(commentInfoDtos.get(i).getParentId())){
-                        commentInfoDtos1.add(commentInfoDtos.get(i));
-                    }
-                }
-                commentInfoDto.setChildren(commentInfoDtos1);
-                dtoList.add(commentInfoDto);
-            }
-         }
-         return  dtoList;
+
+    /**
+     * 注销
+     * @param userId
+     * @return Result
+     * */
+    @RequestMapping(value = "/cancellation",method = RequestMethod.GET)
+    public Result cancellation(int userId){
+     return Result.success(userInfoService.deleteByPrimaryKey(userId));
     }
+
+
+
     private Integer getcommentCount(List<PostInfo> postInfos){
          Integer commentCount = 0;
          if (!StringUtils.isEmpty(postInfos)){
@@ -98,6 +101,7 @@ public class UserInfoController {
         }
          return commentCount;
     }
+
 
 
 }

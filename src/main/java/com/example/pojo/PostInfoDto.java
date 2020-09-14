@@ -18,5 +18,10 @@ public class PostInfoDto extends PostInfo {
     @ApiParam(value = "评论总数")
     private int commentCount;
     @ApiParam(value = "评论总数")
-    private int likeCount;
+    private String likeCount;
+
+    @ApiParam(value = "是否评论")
+    private boolean isLike;
+
+    private String time;
 }

@@ -51,6 +51,11 @@ public class LoginInfoServiceImpl implements LoginInfoService {
     }
 
     @Override
+    public List seachByUsername(String username) {
+        return loginInfoMapper.seachByUsername(username);
+    }
+
+    @Override
     public boolean findByUsername(String username) {
         return loginInfoMapper.findByUsername(username) == null? false:true;
     }

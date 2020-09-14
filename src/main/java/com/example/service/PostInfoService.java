@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.bean.CommentInfo;
 import com.example.bean.PostInfo;
+import com.example.until.Result;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public interface PostInfoService {
 
     int insertSelective(PostInfo record);
 
-    PostInfo selectByPrimaryKey(Integer id);
+    Result findOnePostInfo(Integer id,String uid);
+
+    PostInfo selectByPrimaryKey(int id);
 
     int updateByPrimaryKeySelective(PostInfo record);
 
@@ -31,6 +34,9 @@ public interface PostInfoService {
 
     List<PostInfo> findAllByStatusAndLabelId(@Param("status") int status, @Param("labelId") int labelId);
 
+     Result giveLike(int userid,int postid);
+
+     Result unGiveLike(int userid,int postid);
 
 
 

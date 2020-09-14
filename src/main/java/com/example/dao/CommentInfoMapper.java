@@ -1,9 +1,7 @@
 package com.example.dao;
 
 import com.example.bean.CommentInfo;
-import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Mapper;import java.util.List;
 
 @Mapper
 public interface CommentInfoMapper {
@@ -26,5 +24,4 @@ public interface CommentInfoMapper {
     CommentInfo findByParentId(int parentId);
 
     Integer findByPostId(int postId);
-
 }

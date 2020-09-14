@@ -12,10 +12,12 @@
     <result column="comment_name" jdbcType="VARCHAR" property="commentName" />
     <result column="comment_head" jdbcType="VARCHAR" property="commentHead" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, parent_id, comment_content, post_id, comment_name, comment_head, `status`
+    id, user_id, parent_id, comment_content, post_id, comment_name, comment_head, `status`, 
+    create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -33,10 +35,10 @@
     <!--@mbg.generated-->
     insert into comment_info (user_id, parent_id, comment_content, 
       post_id, comment_name, comment_head, 
-      `status`)
+      `status`, create_time)
     values (#{userId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{commentContent,jdbcType=VARCHAR}, 
       #{postId,jdbcType=INTEGER}, #{commentName,jdbcType=VARCHAR}, #{commentHead,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER})
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.bean.CommentInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -63,6 +65,9 @@
       <if test="status != null">
         `status`,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -85,6 +90,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -113,6 +121,9 @@
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
       </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -125,7 +136,8 @@
       post_id = #{postId,jdbcType=INTEGER},
       comment_name = #{commentName,jdbcType=VARCHAR},
       comment_head = #{commentHead,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=INTEGER}
+      `status` = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <select id="findAllByPostId" resultMap="BaseResultMap">

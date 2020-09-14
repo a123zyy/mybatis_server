@@ -22,6 +22,8 @@ public interface LoginInfoService{
 
     List findByUsernameAndPassword(String username,String password);
 
+    List seachByUsername(String username);
+
 
     boolean findByUsername(String username);
 

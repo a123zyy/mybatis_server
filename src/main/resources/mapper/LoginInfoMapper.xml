@@ -148,4 +148,7 @@
     <select id="selectByUserName" resultMap="BaseResultMap">
         select * from login_info where username = #{username,jdbcType=VARCHAR}
     </select>
+    <select id="seachByUsername" resultMap="BaseResultMap">
+        select * from login_info where username = #{username,jdbcType=VARCHAR}
+    </select>
 </mapper>

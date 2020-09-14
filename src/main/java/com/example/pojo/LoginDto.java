@@ -12,5 +12,5 @@ public class LoginDto {
     @ApiModelProperty(value = "手机号,用于验证码")
     public Integer phoneNum;
     @ApiModelProperty(value = "1 账号密码 2验证码 2第三方登录")
-    public int type;
+    public int loginType;
 }

@@ -2,17 +2,24 @@ package com.example.service.serviceImpl;
 
 import com.example.bean.CommentInfo;
 import com.example.dao.CommentInfoMapper;
+import com.example.dao.UserInfoMapper;
 import com.example.service.CommentInfoService;
+import com.example.until.ErroMsg;
+import com.example.until.Result;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CommentInfoServiceImpl implements CommentInfoService {
 
     @Resource
     private CommentInfoMapper commentInfoMapper;
+
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -25,8 +32,24 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     }
 
     @Override
-    public int insertSelective(CommentInfo record) {
-        return commentInfoMapper.insertSelective(record);
+    public Result insertSelective(int postId,String commentContent,int userId,int parentId) {
+        if (Objects.isNull(postId)){
+            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
+        }
+        if (Objects.isNull(userId)){
+            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
+        }
+        if (commentContent.length() > 150){
+            return Result.error(ErroMsg.PARAMER_LENGTH_ERROR);
+        }
+        CommentInfo commentInfo =new CommentInfo();
+        commentInfo.setCommentHead(userInfoMapper.selectByPrimaryKey(userId).getAvatar());
+        commentInfo.setCommentContent(commentContent);
+        commentInfo.setUserId(userId);
+        commentInfo.setPostId(postId);
+        commentInfo.setParentId(parentId);
+        commentInfo.setCreateTime(System.currentTimeMillis());
+        return Result.success( commentInfoMapper.insertSelective(commentInfo));
     }
 
     @Override

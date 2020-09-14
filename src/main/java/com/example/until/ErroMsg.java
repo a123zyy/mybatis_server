@@ -49,7 +49,7 @@ public class ErroMsg extends Throwable {
     public static ErroMsg MOBILE_NOT_EXIST = new ErroMsg(500214, "手机号不存在");
     public static ErroMsg PASSWORD_ERROR = new ErroMsg(500215, "密码错误");
     public static ErroMsg PRIMARY_ERROR = new ErroMsg(500216, "主键冲突");
-    public static ErroMsg NAMED_REPEAT_ERROR = new ErroMsg(500217, "名字重复");
+    public static ErroMsg NAMED_REPEAT_ERROR = new ErroMsg(500217, "该账户已被占用");
     public static ErroMsg PARAMETER_MINUS_ERROR = new ErroMsg(500218, "参数为负");
     public static ErroMsg NAMED_NULL_ERROR = new ErroMsg(500219, "名字为空");
     public static ErroMsg REDIS_NULL_ERROR = new ErroMsg(5002120, "redis出现问题");

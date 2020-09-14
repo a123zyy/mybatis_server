@@ -5,17 +5,19 @@
     <!--@mbg.generated-->
     <!--@Table post_info-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="post_content" jdbcType="VARCHAR" property="postContent" />
+    <result column="post_content" jdbcType="LONGVARCHAR" property="postContent" />
     <result column="post_name" jdbcType="VARCHAR" property="postName" />
     <result column="post_type" jdbcType="INTEGER" property="postType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="like_count" jdbcType="VARCHAR" property="likeCount" />
     <result column="label_id" jdbcType="INTEGER" property="labelId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, post_content, post_name, post_type, create_time, `status`, user_id, label_id
+    id, post_content, post_name, post_type, create_time, `status`, user_id, like_count, 
+    label_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -33,10 +35,10 @@
     <!--@mbg.generated-->
     insert into post_info (post_content, post_name, post_type, 
       create_time, `status`, user_id, 
-      label_id)
-    values (#{postContent,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{postType,jdbcType=INTEGER}, 
+      like_count, label_id)
+    values (#{postContent,jdbcType=LONGVARCHAR}, #{postName,jdbcType=VARCHAR}, #{postType,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
-      #{labelId,jdbcType=INTEGER})
+      #{likeCount,jdbcType=VARCHAR}, #{labelId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.bean.PostInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -60,13 +62,16 @@
       <if test="userId != null">
         user_id,
       </if>
+      <if test="likeCount != null">
+        like_count,
+      </if>
       <if test="labelId != null">
         label_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="postContent != null">
-        #{postContent,jdbcType=VARCHAR},
+        #{postContent,jdbcType=LONGVARCHAR},
       </if>
       <if test="postName != null">
         #{postName,jdbcType=VARCHAR},
@@ -83,6 +88,9 @@
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
+      <if test="likeCount != null">
+        #{likeCount,jdbcType=VARCHAR},
+      </if>
       <if test="labelId != null">
         #{labelId,jdbcType=INTEGER},
       </if>
@@ -93,7 +101,7 @@
     update post_info
     <set>
       <if test="postContent != null">
-        post_content = #{postContent,jdbcType=VARCHAR},
+        post_content = #{postContent,jdbcType=LONGVARCHAR},
       </if>
       <if test="postName != null">
         post_name = #{postName,jdbcType=VARCHAR},
@@ -110,6 +118,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
+      <if test="likeCount != null">
+        like_count = #{likeCount,jdbcType=VARCHAR},
+      </if>
       <if test="labelId != null">
         label_id = #{labelId,jdbcType=INTEGER},
       </if>
@@ -119,12 +130,13 @@
   <update id="updateByPrimaryKey" parameterType="com.example.bean.PostInfo">
     <!--@mbg.generated-->
     update post_info
-    set post_content = #{postContent,jdbcType=VARCHAR},
+    set post_content = #{postContent,jdbcType=LONGVARCHAR},
       post_name = #{postName,jdbcType=VARCHAR},
       post_type = #{postType,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},
+      like_count = #{likeCount,jdbcType=VARCHAR},
       label_id = #{labelId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

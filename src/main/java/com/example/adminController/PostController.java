@@ -50,7 +50,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "PostInfo", method = RequestMethod.POST)
-    public Result InsertPost(@RequestBody PostInfoDto postInfoDto) {
+    public Result insertPost(@RequestBody PostInfoDto postInfoDto) {
         if (StringUtils.isEmpty(postInfoDto)) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
         }

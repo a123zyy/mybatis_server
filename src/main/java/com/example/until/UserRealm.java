@@ -6,6 +6,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.RememberMeAuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -56,13 +57,16 @@ public class UserRealm extends AuthorizingRealm {
         if (StringUtils.isEmpty(usernamePasswordToken.getPassword())){
             throw new UnknownAccountException("密码不能为空");
         }
-        List list =  loginInfoService.findByUsernameAndPassword(usernamePasswordToken.getUsername(),usernamePasswordToken.getPassword()+"");
-        if (list.size()>1){
+        List list =  loginInfoService.seachByUsername(usernamePasswordToken.getUsername());
+        if (list.size() > 1){
             throw new IncorrectCredentialsException("用户名重复");
         }
         if (list.size() == 0){
             throw new IncorrectCredentialsException("用户不存在");
         }
+        usernamePasswordToken.setRememberMe(true);
         return new SimpleAuthenticationInfo(usernamePasswordToken,usernamePasswordToken.getPassword(),getName());
     }
+
+
 }
