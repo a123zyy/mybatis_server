@@ -7,10 +7,10 @@ import com.example.service.CommentInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.Result;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class CommentInfoServiceImpl implements CommentInfoService {
@@ -32,16 +32,20 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     }
 
     @Override
-    public Result insertSelective(int postId,String commentContent,int userId,int parentId) {
-        if (Objects.isNull(postId)){
+    public Result insertSelective(int postId,String commentContent,int parentId,int userId) {
+        if (StringUtils.isEmpty(postId)){
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
         }
-        if (Objects.isNull(userId)){
+        if (StringUtils.isEmpty(commentContent)){
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
         }
         if (commentContent.length() > 150){
             return Result.error(ErroMsg.PARAMER_LENGTH_ERROR);
         }
+        if (StringUtils.isEmpty(userId)){
+            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
+        }
+
         CommentInfo commentInfo =new CommentInfo();
         commentInfo.setCommentHead(userInfoMapper.selectByPrimaryKey(userId).getAvatar());
         commentInfo.setCommentContent(commentContent);
@@ -49,7 +53,7 @@ public class CommentInfoServiceImpl implements CommentInfoService {
         commentInfo.setPostId(postId);
         commentInfo.setParentId(parentId);
         commentInfo.setCreateTime(System.currentTimeMillis());
-        return Result.success( commentInfoMapper.insertSelective(commentInfo));
+        return Result.success(commentInfoMapper.insertSelective(commentInfo));
     }
 
     @Override

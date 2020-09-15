@@ -7,6 +7,7 @@ import com.example.service.LoginInfoService;
 import com.example.service.UserInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.GlobalUntil;
+import com.example.until.GlobalnumInfo;
 import com.example.until.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -52,7 +53,7 @@ public class LoginController {
             throw new UnknownAccountException("用户名或密码为空");
         }
         //账户密码
-        if (loginDto.getLoginType() == 1){
+        if (loginDto.getLoginType() == GlobalnumInfo.IS_PASSWORD.Key){
             Subject currentUser = SecurityUtils.getSubject();
             if (!currentUser.isAuthenticated()) {
                 try {
@@ -74,10 +75,10 @@ public class LoginController {
             }
             currentUser = SecurityUtils.getSubject();
             currentUser.isRemembered();
-        } else if (loginDto.getLoginType() == 2){
+        } else if (loginDto.getLoginType() == GlobalnumInfo.IS_MOBILE.Key){
             //手机号
             return Result.success("");
-        } else if (loginDto.getLoginType() == 3){
+        } else if (loginDto.getLoginType() == GlobalnumInfo.IS_THIRED.Key){
             //第三方
             return Result.success("");
         }

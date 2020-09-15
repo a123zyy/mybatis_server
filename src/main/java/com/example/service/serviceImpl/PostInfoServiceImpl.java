@@ -73,7 +73,7 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
 
     @Override
-    public Result findOnePostInfo(Integer id,String uid) {
+    public PostInfoDto findOnePostInfo(Integer id,String uid) {
 
         PostInfo postInfo = postInfoMapper.selectByPrimaryKey(1);
         PostInfoDto postInfoDto =new PostInfoDto();
@@ -84,19 +84,31 @@ public class PostInfoServiceImpl implements PostInfoService {
             postInfoDto.setLabelName(labelInfo.getLable());
             //根据postid查出所有的评论list
             List<CommentInfo> commentInfos = commentInfoMapper.findAllByPostId(postInfoDto.getId());
-            if (!StringUtils.isEmpty(commentInfos) && commentInfos.size()> GlobalnumInfo.NO_ASABLE.Key){
-                List<CommentInfoDto> commentInfoDtos = commentInfos.stream().map(item->{
+                List<CommentInfoDto> commentInfoDtos1 = commentInfos.stream()
+                        .filter(commentInfoDto -> commentInfoDto.getParentId() == GlobalnumInfo.NO_ASABLE.Key)
+                        .map(item->{
                     CommentInfoDto commentInfoDto = new CommentInfoDto();
                     BeanUtils.copyProperties(item,commentInfoDto);
                     return commentInfoDto;
+                }).peek(commentInfoDto -> {
+                    List<CommentInfoDto> children = commentInfos.stream()
+                            .filter(x -> commentInfoDto.getId().equals(x.getParentId()))
+                            .map(x -> {
+                                // 避免循环引用 创建新对象
+                                CommentInfoDto newInfo = new CommentInfoDto();
+                                BeanUtils.copyProperties(x, newInfo);
+                                return newInfo;
+                            })
+                            .collect(Collectors.toList());
+                    commentInfoDto.setChildren(children);
                 }).collect(Collectors.toList());
-                postInfoDto.setCommentInfoDtos(this.getChildren(commentInfoDtos));
+                postInfoDto.setCommentInfoDtos(commentInfoDtos1);
                 if (Objects.nonNull(uid)){
-                  postInfoDto.setLike(redisUtil.get(USER_ID+uid) != null);
+                    postInfoDto.setLike(redisUtil.hget(USER_ID+uid,USER_ID) ==null?false:true);
                 }
-            }
+
         }
-        return Result.success(postInfoDto);
+        return postInfoDto;
     }
 
     @Override

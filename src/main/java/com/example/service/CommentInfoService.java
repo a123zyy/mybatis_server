@@ -17,11 +17,10 @@ public interface CommentInfoService {
      * 回复评论
      * @param postId
      * @param commentContent
-     * @param userId
      * @param parentId
-     * @return Result
+     * @return int
      * */
-    Result insertSelective(int postId,String commentContent,int userId,int parentId);
+    Result insertSelective(int postId,String commentContent,int parentId,int userId);
 
     CommentInfo selectByPrimaryKey(Integer id);
 

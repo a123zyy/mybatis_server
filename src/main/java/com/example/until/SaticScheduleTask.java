@@ -10,13 +10,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -35,7 +32,6 @@ public class SaticScheduleTask {
 
      @Scheduled(cron = "0 0 0/1 * * ?")
     //每两秒执行一次
-    //@Scheduled(cron = "*/5 * * * * ?")
     public void redisDataToMySQL() {
         DateTimeFormatter dateTimeFormatter= DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss");
         //java8 localDateTime

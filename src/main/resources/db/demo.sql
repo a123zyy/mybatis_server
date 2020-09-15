@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : utf-8
 
- Date: 08/24/2020 18:33:47 PM
+ Date: 09/15/2020 18:36:36 PM
 */
 
 SET NAMES utf8mb4;
@@ -30,14 +30,15 @@ CREATE TABLE `comment_info` (
   `comment_name` varchar(32) NOT NULL DEFAULT '' COMMENT '评论者name',
   `comment_head` varchar(255) NOT NULL COMMENT '评论者头像',
   `status` int(2) DEFAULT '1' COMMENT '1正常 0不正常',
+  `create_time` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `comment_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `comment_info` VALUES ('1', '2', '0', '你说', '1', '绰6816', '0', '1'), ('2', '3', '1', '哈哈哈', '1', '胨6576', '11321', '1'), ('3', '1', '1', '有道理', '1', '羁3781', '23', '1'), ('4', '1', '0', '这是一条神奇的天路', '2', '羁3781', 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', '1');
+INSERT INTO `comment_info` VALUES ('1', '2', '0', '你说', '1', '绰6816', 'https://dev-qiniu-dp.xfun233.com/2bc456ab131343c3a7b9ee69e4f0cd23.jpg', '1', '1596266446000'), ('2', '3', '1', '哈哈哈', '1', '胨6576', 'https://dev-qiniu-dp.xfun233.com/2bc456ab131343c3a7b9ee69e4f0cd23.jpg', '1', '1596439246000'), ('3', '1', '1', '有道理', '1', '羁3781', 'https://dev-qiniu-dp.xfun233.com/2bc456ab131343c3a7b9ee69e4f0cd23.jpg', '1', '1596439246000'), ('4', '2', '0', '你们真低牛皮哦', '1', '绰6816', 'https://dev-qiniu-dp.xfun233.com/2bc456ab131343c3a7b9ee69e4f0cd23.jpg', '1', '1598944846000');
 COMMIT;
 
 -- ----------------------------
@@ -94,13 +95,13 @@ CREATE TABLE `login_info` (
   `roleid` int(32) DEFAULT NULL,
   `phone_num` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `login_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `login_info` VALUES ('1', 'root123', 'root123', '0', '2020-08-24 10:30:00', null, '1', null, null), ('2', 'admin123', 'admin123', '0', '2020-08-21 03:41:04', null, '2', null, null), ('3', 'zyy123', 'zyy123', '0', '2020-08-21 03:41:21', null, '3', null, null);
+INSERT INTO `login_info` VALUES ('1', 'root123', 'root123', '0', '2020-08-24 10:30:00', null, '1', null, null), ('2', 'admin123', 'admin123', '0', '2020-08-21 03:41:04', null, '2', null, null), ('3', 'zyy123', 'zyy123', '0', '2020-08-21 03:41:21', null, '3', null, null), ('4', 'ZYJ123', 'yy123456', '1', '2020-09-14 07:33:50', null, '6', null, null);
 COMMIT;
 
 -- ----------------------------
@@ -109,12 +110,13 @@ COMMIT;
 DROP TABLE IF EXISTS `post_info`;
 CREATE TABLE `post_info` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
-  `post_content` varchar(255) NOT NULL COMMENT '帖子 内容富文本',
+  `post_content` longtext NOT NULL COMMENT '帖子 内容富文本',
   `post_name` varchar(32) NOT NULL COMMENT '帖子标题',
   `post_type` int(2) NOT NULL,
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` int(11) DEFAULT '1' COMMENT '0 删除 1可用',
   `user_id` int(32) DEFAULT NULL,
+  `like_count` varchar(255) DEFAULT NULL COMMENT '文章点赞总数',
   `label_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -123,7 +125,7 @@ CREATE TABLE `post_info` (
 --  Records of `post_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `post_info` VALUES ('1', '大家好,这个是第一条的测试啊啊啊', '羁3781', '1', '2020-08-22 11:42:24', '1', '1', '1'), ('2', '你说的是个屁', '胨6576', '1', '2020-08-21 11:48:56', '1', '3', '1');
+INSERT INTO `post_info` VALUES ('1', '<p><strong>这是一个晴朗的暂存</strong></p><p>吃的晚滑板车保密文学技能</p>\\n\\n<p style=\\\"text-align:center\\\"><img alt=\\\"\\\" src=\\\"https://img-blog.csdnimg.cn/20200831151126487.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5MjY0ODk3,size_16,color_FFFFFF,t_70\\\" /></p>\\n\\n<p>哈哈哈</p>\\n', '关于我是谁', '1', '2020-08-22 11:42:24', '1', '1', '7', '1'), ('2', '<p><strong>这是一个晴朗的暂存</strong></p>\\n\\n<p>吃的晚滑板车保密文学技能</p>\\n\\n<p style=\\\"text-align:center\\\"><img alt=\\\"\\\" src=\\\"https://img-blog.csdnimg.cn/20200831151126487.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5MjY0ODk3,size_16,color_FFFFFF,t_70\\\" /></p>\\n\\n<p>哈哈哈</p>\\n', '胨6576', '1', '2020-08-21 11:48:56', '1', '3', null, '1');
 COMMIT;
 
 -- ----------------------------
@@ -138,13 +140,13 @@ CREATE TABLE `user_info` (
   `phone` int(11) DEFAULT NULL,
   `comment` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `user_info`
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_info` VALUES ('1', '羁3781', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('2', '绰6816', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('3', '胨6576', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~');
+INSERT INTO `user_info` VALUES ('1', '羁3781', '2', 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('2', '绰6816', '3', 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('3', '胨6576', '2', 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('5', '嵓2634', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~'), ('6', '鏥5012', null, 'https://img.blkbst.com/f74648b9faf64170880b92becd1e968b.png', null, '这个人什么都没留下~');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

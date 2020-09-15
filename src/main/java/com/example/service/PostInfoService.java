@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.bean.CommentInfo;
 import com.example.bean.PostInfo;
+import com.example.pojo.PostInfoDto;
 import com.example.until.Result;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,7 +17,7 @@ public interface PostInfoService {
 
     int insertSelective(PostInfo record);
 
-    Result findOnePostInfo(Integer id,String uid);
+    PostInfoDto findOnePostInfo(Integer id, String uid);
 
     PostInfo selectByPrimaryKey(int id);
 

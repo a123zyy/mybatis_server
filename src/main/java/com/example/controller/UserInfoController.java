@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,28 +81,15 @@ public class UserInfoController {
 
     /**
      * 注销
-     * @param userId
      * @return Result
      * */
     @RequestMapping(value = "/cancellation",method = RequestMethod.GET)
-    public Result cancellation(int userId){
-     return Result.success(userInfoService.deleteByPrimaryKey(userId));
-    }
-
-
-
-    private Integer getcommentCount(List<PostInfo> postInfos){
-         Integer commentCount = 0;
-         if (!StringUtils.isEmpty(postInfos)){
-            for (PostInfo postInfo:postInfos){
-                Integer count = 0;
-                count = commentInfoService.findByPostId(postInfo.getId());
-                commentCount+=count;
-            }
+    public Result cancellation(HttpServletRequest httpServletRequest){
+        if (httpServletRequest.getHeader("uid") ==null){
+            return Result.error(ErroMsg.PRIMARY_ERROR);
         }
-         return commentCount;
+     return Result.success(userInfoService.deleteByPrimaryKey(Integer.parseInt(httpServletRequest.getHeader("uid"))));
     }
-
 
 
 }

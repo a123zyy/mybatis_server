@@ -9,11 +9,13 @@ import com.example.until.Result;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.ws.handler.PortInfo;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @RequestMapping("/web/CommentInfo")
@@ -29,13 +31,15 @@ public class CommentInfoController {
      * 回复评论
      * @param postId
      * @param commentContent
-     * @param userId
      * @param parentId
      * @return Result
      * */
-    @RequestMapping(value = "/addCommentInfo",method = RequestMethod.GET)
-    public Result addCommentInfo(int postId,String commentContent,int userId,int parentId){
-        return Result.success( commentInfoService.insertSelective(postId,commentContent,userId,parentId));
+    @RequestMapping(value = "/CommentInfo",method = RequestMethod.GET)
+    public Result addCommentInfo(int postId, String commentContent, int parentId, HttpServletRequest httpServletRequest){
+        if (null == httpServletRequest.getHeader("uid")){
+            return Result.error(ErroMsg.PRIMARY_ERROR);
+        }
+        return Result.success( commentInfoService.insertSelective(postId,commentContent,parentId,Integer.parseInt(httpServletRequest.getHeader("uid"))));
     }
 
     /**
@@ -43,9 +47,9 @@ public class CommentInfoController {
      * @param commentID
      * @return Result
      * */
-    @RequestMapping(value = "/delCommentInfo",method = RequestMethod.GET)
-    public Result delCommentInfo(int commentID){
-        if (Objects.isNull(commentID)){
+    @RequestMapping(value = "/CommentInfo/{commentID}",method = RequestMethod.PATCH)
+    public Result delCommentInfo(@PathVariable int commentID){
+        if (StringUtils.isEmpty(commentID)){
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
         }
         CommentInfo commentInfo = commentInfoService.selectByPrimaryKey(commentID);
