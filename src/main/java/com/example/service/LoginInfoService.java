@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.bean.LoginInfo;
+import com.example.bean.UserInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,9 +21,9 @@ public interface LoginInfoService{
 
     int updateByPrimaryKey(LoginInfo record);
 
-    List findByUsernameAndPassword(String username,String password);
+    List<LoginInfo> findByUsernameAndPassword(String username, String password);
 
-    List seachByUsername(String username);
+    List<LoginInfo> seachByUsername(String username);
 
 
     boolean findByUsername(String username);

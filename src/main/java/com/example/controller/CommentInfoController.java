@@ -59,6 +59,18 @@ public class CommentInfoController {
         return Result.success(commentInfoService.updateByPrimaryKeySelective(commentInfo));
     }
 
+    /**
+     * 根据文章id查评论
+     *
+     * @param postID
+     * @return Result
+     */
+
+    @RequestMapping(value = "Comments/{postID}", method = RequestMethod.GET)
+    public Result getComments(@PathVariable int postID) {
+        return Result.success(commentInfoService.findByPostId(postID));
+    }
+
 
 
 

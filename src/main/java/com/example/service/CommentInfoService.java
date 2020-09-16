@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.bean.CommentInfo;
+import com.example.pojo.CommentInfoDto;
 import com.example.until.Result;
 
 import java.util.List;
@@ -30,11 +31,13 @@ public interface CommentInfoService {
 
     int findByUserId(int status);
 
-    List<CommentInfo> findAllByPostId(int postId);
+    List<CommentInfoDto> findAllByPostId(int postId);
 
     Integer findByPostId(int postId);
 
     CommentInfo findByParentId(int parentId);
+
+    List<CommentInfo> finAll();
 
 
 

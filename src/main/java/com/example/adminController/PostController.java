@@ -30,7 +30,7 @@ public class PostController {
     @Autowired
     public LabelInfoService labelInfoService;
 
-    @RequestMapping(value = "postList", method = RequestMethod.GET)
+    @RequestMapping(value = "posts", method = RequestMethod.GET)
     public Result getALL(int pageSize, int PageNum) {
         PageHelper.startPage(PageNum, pageSize);
         List<PostInfo> postInfos = postInfoService.finAll();
@@ -69,6 +69,25 @@ public class PostController {
     }
 
     @RequestMapping(value = "PostInfo", method = RequestMethod.PUT)
+    public Result upadtePost(@RequestBody PostInfoDto postInfoDto) {
+        if (StringUtils.isEmpty(postInfoDto)) {
+            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
+        }
+        if (StringUtils.isEmpty(postInfoDto.getPostContent())) {
+            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
+        }
+        if (StringUtils.isEmpty(postInfoDto.getPostName())) {
+            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
+        }
+        if (StringUtils.isEmpty(postInfoDto.getLabelId())) {
+            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
+        }
+        PostInfo postInfo = postInfoService.selectByPrimaryKey(postInfoDto.getId());
+        BeanUtils.copyProperties(postInfoDto, postInfo);
+        return Result.success(postInfoService.updateByPrimaryKeySelective(postInfo));
+    }
+
+    @RequestMapping(value = "PostInfoStatus", method = RequestMethod.DELETE)
     public Result updateStatus(int id, int status) {
         if (id == 0) {
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);

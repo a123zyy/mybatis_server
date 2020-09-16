@@ -9,6 +9,7 @@ import com.example.dao.LabelInfoMapper;
 import com.example.dao.PostInfoMapper;
 import com.example.pojo.CommentInfoDto;
 import com.example.pojo.PostInfoDto;
+import com.example.service.CommentInfoService;
 import com.example.service.PostInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.GlobalnumInfo;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -53,9 +55,16 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Autowired
     private CommentInfoMapper commentInfoMapper;
 
+    @Autowired
+    private CommentInfoService commentInfoService;
+
     public static final String GIVE_LIKE = "give_like";
 
     public static final String USER_ID = "user_id";
+
+
+    @Resource(name = "redisTemplate")
+    private ZSetOperations<String, String> zSetOperations;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -74,7 +83,6 @@ public class PostInfoServiceImpl implements PostInfoService {
 
     @Override
     public PostInfoDto findOnePostInfo(Integer id,String uid) {
-
         PostInfo postInfo = postInfoMapper.selectByPrimaryKey(1);
         PostInfoDto postInfoDto =new PostInfoDto();
         BeanUtils.copyProperties(postInfo,postInfoDto);
@@ -83,29 +91,10 @@ public class PostInfoServiceImpl implements PostInfoService {
             LabelInfo labelInfo = labelInfoMapper.selectByPrimaryKey(postInfoDto.getLabelId());
             postInfoDto.setLabelName(labelInfo.getLable());
             //根据postid查出所有的评论list
-            List<CommentInfo> commentInfos = commentInfoMapper.findAllByPostId(postInfoDto.getId());
-                List<CommentInfoDto> commentInfoDtos1 = commentInfos.stream()
-                        .filter(commentInfoDto -> commentInfoDto.getParentId() == GlobalnumInfo.NO_ASABLE.Key)
-                        .map(item->{
-                    CommentInfoDto commentInfoDto = new CommentInfoDto();
-                    BeanUtils.copyProperties(item,commentInfoDto);
-                    return commentInfoDto;
-                }).peek(commentInfoDto -> {
-                    List<CommentInfoDto> children = commentInfos.stream()
-                            .filter(x -> commentInfoDto.getId().equals(x.getParentId()))
-                            .map(x -> {
-                                // 避免循环引用 创建新对象
-                                CommentInfoDto newInfo = new CommentInfoDto();
-                                BeanUtils.copyProperties(x, newInfo);
-                                return newInfo;
-                            })
-                            .collect(Collectors.toList());
-                    commentInfoDto.setChildren(children);
-                }).collect(Collectors.toList());
-                postInfoDto.setCommentInfoDtos(commentInfoDtos1);
-                if (Objects.nonNull(uid)){
-                    postInfoDto.setLike(redisUtil.hget(USER_ID+uid,USER_ID) ==null?false:true);
-                }
+            postInfoDto.setCommentInfoDtos(commentInfoService.findAllByPostId(postInfoDto.getId()));
+            if (Objects.nonNull(uid)) {
+                postInfoDto.setLike(zSetOperations.zCard(USER_ID + uid) == null ? false : true);
+            }
 
         }
         return postInfoDto;
@@ -158,7 +147,7 @@ public class PostInfoServiceImpl implements PostInfoService {
         if (getParamer(userid,userid)){
            try {
                //点赞
-              redisUtil.hset(USER_ID+userid,USER_ID,postid);
+               zSetOperations.add(USER_ID + userid, userid + "", System.currentTimeMillis());
                //总量加1
                gitcount  = (Integer) redisTemplate.opsForValue().get(GIVE_LIKE+postid);
                if (gitcount == null){
@@ -178,12 +167,13 @@ public class PostInfoServiceImpl implements PostInfoService {
         //判断是否点赞
         if (!getParamer(userid,postid)){
             try {
-                //点赞
-                redisTemplate.opsForHash().delete(USER_ID+userid, USER_ID);
+                //取消点赞
+                zSetOperations.remove(USER_ID + userid, userid);
                 //总量减1
                 gitcount  = (Integer) redisTemplate.opsForValue().get(GIVE_LIKE+postid);
                 redisTemplate.opsForValue().set(GIVE_LIKE+postid, gitcount-1);
             } catch (Exception e){
+                log.info("redis遇见错误" + e);
                 return Result.error(ErroMsg.BIND_ERROR);
             }
         }

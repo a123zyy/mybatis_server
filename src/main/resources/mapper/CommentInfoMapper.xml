@@ -152,4 +152,7 @@
     <select id="findByPostId" resultType="java.lang.Integer">
         select count(*) from comment_info where post_id = #{postId,jdbcType=INTEGER}
     </select>
+    <delete id="finAll">
+        select * from comment_info
+    </delete>
 </mapper>

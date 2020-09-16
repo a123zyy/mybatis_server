@@ -2,6 +2,7 @@ package com.example.service.serviceImpl;
 
 
 import com.example.bean.LoginInfo;
+import com.example.bean.UserInfo;
 import com.example.dao.LoginInfoMapper;
 import com.example.service.LoginInfoService;
 import org.springframework.stereotype.Service;
@@ -46,12 +47,12 @@ public class LoginInfoServiceImpl implements LoginInfoService {
     }
 
     @Override
-    public List findByUsernameAndPassword(String username, String password) {
+    public List<LoginInfo> findByUsernameAndPassword(String username, String password) {
         return loginInfoMapper.findByUsernameAndPassword(username,password);
     }
 
     @Override
-    public List seachByUsername(String username) {
+    public List<LoginInfo> seachByUsername(String username) {
         return loginInfoMapper.seachByUsername(username);
     }
 

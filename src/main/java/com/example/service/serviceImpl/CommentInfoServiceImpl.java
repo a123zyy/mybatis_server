@@ -3,15 +3,22 @@ package com.example.service.serviceImpl;
 import com.example.bean.CommentInfo;
 import com.example.dao.CommentInfoMapper;
 import com.example.dao.UserInfoMapper;
+import com.example.pojo.CommentInfoDto;
 import com.example.service.CommentInfoService;
 import com.example.until.ErroMsg;
+import com.example.until.GlobalnumInfo;
 import com.example.until.Result;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * @author zyy
+ */
 @Service
 public class CommentInfoServiceImpl implements CommentInfoService {
 
@@ -32,7 +39,7 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     }
 
     @Override
-    public Result insertSelective(int postId,String commentContent,int parentId,int userId) {
+    public Result insertSelective(int postId, String commentContent, int parentId, int userId) {
         if (StringUtils.isEmpty(postId)){
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
         }
@@ -77,8 +84,27 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     }
 
     @Override
-    public List<CommentInfo> findAllByPostId(int postId) {
-        return commentInfoMapper.findAllByPostId(postId);
+    public List<CommentInfoDto> findAllByPostId(int postId) {
+        List<CommentInfo> commentInfos = commentInfoMapper.findAllByPostId(postId);
+        List<CommentInfoDto> commentInfoDtos1 = commentInfos.stream()
+                .filter(commentInfoDto -> commentInfoDto.getParentId() == GlobalnumInfo.NO_ASABLE.Key)
+                .map(item -> {
+                    CommentInfoDto commentInfoDto = new CommentInfoDto();
+                    BeanUtils.copyProperties(item, commentInfoDto);
+                    return commentInfoDto;
+                }).peek(commentInfoDto -> {
+                    List<CommentInfoDto> children = commentInfos.stream()
+                            .filter(x -> commentInfoDto.getId().equals(x.getParentId()))
+                            .map(x -> {
+                                // 避免循环引用 创建新对象
+                                CommentInfoDto newInfo = new CommentInfoDto();
+                                BeanUtils.copyProperties(x, newInfo);
+                                return newInfo;
+                            })
+                            .collect(Collectors.toList());
+                    commentInfoDto.setChildren(children);
+                }).collect(Collectors.toList());
+        return commentInfoDtos1;
     }
 
     @Override
@@ -88,10 +114,13 @@ public class CommentInfoServiceImpl implements CommentInfoService {
 
     @Override
     public CommentInfo findByParentId(int parentId) {
-      return commentInfoMapper.findByParentId(parentId);
+        return commentInfoMapper.findByParentId(parentId);
     }
 
-
+    @Override
+    public List<CommentInfo> finAll() {
+        return commentInfoMapper.finAll();
+    }
 
 
 }

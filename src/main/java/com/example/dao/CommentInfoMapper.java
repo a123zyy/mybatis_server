@@ -24,4 +24,6 @@ public interface CommentInfoMapper {
     CommentInfo findByParentId(int parentId);
 
     Integer findByPostId(int postId);
+
+    List<CommentInfo> finAll();
 }

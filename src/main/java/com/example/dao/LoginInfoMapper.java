@@ -17,7 +17,7 @@ public interface LoginInfoMapper {
 
     int updateByPrimaryKey(LoginInfo record);
 
-    List findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+    List<LoginInfo> findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     List<LoginInfo> seachByUsername(@Param("username") String username);
 

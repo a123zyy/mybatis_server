@@ -139,9 +139,6 @@
       phone_num = #{phoneNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <select id="findByUsernameAndPassword" resultType="java.util.List">
-        select * from login_info where username = #{username,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
-    </select>
     <select id="findByUsername" resultType="java.lang.Integer">
         select * from login_info where username = #{username,jdbcType=VARCHAR}
     </select>
@@ -150,5 +147,9 @@
     </select>
     <select id="seachByUsername" resultMap="BaseResultMap">
         select * from login_info where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <select id="findByUsernameAndPassword" resultMap="BaseResultMap">
+        select * from login_info where username = #{username,jdbcType=VARCHAR} and password =
+        #{password,jdbcType=VARCHAR}
     </select>
 </mapper>

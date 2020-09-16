@@ -27,8 +27,8 @@ public class BlogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        if (request.getServletPath() == "/web/PostInfo/likes" || request.getServletPath() == "/web/CommentInfo/CommentInfo"||request.getServletPath() == "/web/PostInfo/List/Oneid"){
-            if ( null == request.getHeader("token") || null ==request.getHeader("uid")){
+        if (request.getServletPath().equals("/web/PostInfo/likes") || request.getServletPath().equals("/web/CommentInfo/CommentInfo") || request.getServletPath().equals("/web/PostInfo/List/Oneid")) {
+            if (null == request.getHeader("token") || null == request.getHeader("uid")) {
                throw new Error();
             }
         }

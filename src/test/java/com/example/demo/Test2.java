@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 
 @SpringBootTest
@@ -30,5 +32,13 @@ public class Test2 {
     @Test
     void contextLoads2() {
         System.out.println(redisUtil.hget("user_id"+1,"user_id"));
+    }
+
+    @Test
+    void contextLoads3() {
+        List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
+
+        IntSummaryStatistics stats = numbers.stream().mapToInt((x) -> x).summaryStatistics();
+
     }
 }
