@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -141,6 +142,10 @@ public class LoginController {
     public char getRandomHan () {
         Random ran = new Random();
         return (char) (0x4e00 + ran.nextInt(DATA));
+    }
+
+    public static void main(String[] args) {
+        JOptionPane.showMessageDialog(null,"sfewe");
     }
 
 

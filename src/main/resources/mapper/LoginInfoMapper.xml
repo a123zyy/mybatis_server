@@ -143,10 +143,7 @@
         select * from login_info where username = #{username,jdbcType=VARCHAR}
     </select>
     <select id="selectByUserName" resultMap="BaseResultMap">
-        select * from login_info where username = #{username,jdbcType=VARCHAR}
-    </select>
-    <select id="seachByUsername" resultMap="BaseResultMap">
-        select * from login_info where username = #{username,jdbcType=VARCHAR}
+        select * from login_info where username = #{username,jdbcType=VARCHAR} limit 0,1
     </select>
     <select id="findByUsernameAndPassword" resultMap="BaseResultMap">
         select * from login_info where username = #{username,jdbcType=VARCHAR} and password =

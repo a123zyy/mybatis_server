@@ -23,8 +23,6 @@ public interface LoginInfoService{
 
     List<LoginInfo> findByUsernameAndPassword(String username, String password);
 
-    List<LoginInfo> seachByUsername(String username);
-
 
     boolean findByUsername(String username);
 

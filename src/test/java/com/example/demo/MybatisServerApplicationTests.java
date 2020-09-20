@@ -49,6 +49,20 @@ class MybatisServerApplicationTests {
 
     }
 
+    @Test
+    void contextLoads12() {
+
+        double[] nums = new double[]{3.5,5,3,3.5,2.2,1.9,2};
+//        Arrays.sort(nums);
+//        Arrays.binarySearch(nums,);
+        threeSumClosest();
+//        System.out.println((int) );
+//        for (double a:nums){
+//            System.out.println(a);
+//        }
+
+    }
+
 
     //    public int rob(int[] nums) {
 //        int n = nums.length;
@@ -241,8 +255,117 @@ class MybatisServerApplicationTests {
         int rn = maxDepth(root.right);
         return ln>rn? ln+1:rn+1;
     }
+    public int minDepth(TreeNode root) {
+        if (root == null){return 0;}
+        int ln = minDepth(root.left);
+        int rn = minDepth(root.right);
+        double[] aaa;
+        int list[];
+        return ln>rn? rn+1:ln+1;
 
+
+    }
+    public double matNum(int[] myList){
+        double max =myList[0];
+        for (int i =1;i<myList.length;i++){
+            if (myList[i] >max){ max =myList[i];}
+        }
+        return max;
+    }
+
+    public double minNum(int[] myList){
+        double min =myList[0];
+        for (int i =1;i<myList.length;i++){
+            if (myList[i] <min){ min =myList[i];}
+        }
+        return min;
+    }
+    //数组从右向左拍
+    public int[] ritoleft(int[] myList){
+       int temp = myList[0];
+        for (int i =0;i<myList.length;i++){
+            if (i == (myList.length - 1)){
+                break;
+            }
+           myList[i] = myList[i+1];
+        }
+        myList[myList.length-1] = temp;
+        return myList;
+    }
+    //数组从左向右拍
+    public int[] lefttori(int[] myList){
+        int aa[] =null;
+        System.arraycopy(myList,0,aa,0,myList.length);
+        int pointer = myList.length -1;
+        int temp = myList[pointer];
+        for (int i =pointer;i > 0;i--){
+            myList[i] = myList[i-1];
+        }
+        myList[0] = temp;
+
+        return myList;
+    }
+    //二分法排序
+    public int getSubscript(int[] num,int key){
+        int low = 0;
+        int high = num.length-1;
+        while (high>=low){
+            int mid = (low+high)/2;
+            if (num[mid] > key){
+                high = mid -1;
+            } else if (num[mid] == key){
+                return mid;
+            }  else {
+                low = mid +1;
+            }
+        }
+        return -1;
+    }
+    //插入排序
+    public double[] insertSort(double[] list){
+        for (int i= 1;i<list.length;i++){
+            double current = list[i];
+            int k;
+            for (k =i-1;k>=0 && list[k] > current;k--){
+                list[k +1] =list[k];
+            }
+            list[k+1] =current;
+        }
+        return list;
+    }
+    //
+    public void threeSumClosest() {
+        int[] list =new int[100];
+       int[] count= new int[10];
+       for (int i =0;i<list.length;i++){
+           list[i] =(int) Math.floor((Math.random()*9)+0);
+           System.out.print(list[i]+"\t\t");
+           int num = list[i];
+           count[num]++;
+       }
+        System.out.println("------------------------");
+        for (int i =0;i<count.length;i++){
+            System.out.println(i+"出现----"+count[i]+"次");
+        }
+    }
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+       return l1;
+    }
+
+    class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int x) { val = x; }
+    }
 }
+
+
+
+
+
+
+
+
 
 
 

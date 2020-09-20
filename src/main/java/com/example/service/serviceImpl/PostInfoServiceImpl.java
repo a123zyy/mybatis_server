@@ -58,9 +58,11 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Autowired
     private CommentInfoService commentInfoService;
 
-    public static final String GIVE_LIKE = "give_like";
+    public static final String BLOG_POST_COUNT_LIKE = "blog_post_count_like:like_num";
 
-    public static final String USER_ID = "user_id";
+    public static final String BLOG_POST_LIKE = "blog_post_like:user_id";
+
+
 
 
     @Resource(name = "redisTemplate")
@@ -93,7 +95,7 @@ public class PostInfoServiceImpl implements PostInfoService {
             //根据postid查出所有的评论list
             postInfoDto.setCommentInfoDtos(commentInfoService.findAllByPostId(postInfoDto.getId()));
             if (Objects.nonNull(uid)) {
-                postInfoDto.setLike(zSetOperations.zCard(USER_ID + uid) == null ? false : true);
+                postInfoDto.setLike(zSetOperations.zCard(BLOG_POST_LIKE + uid) == null ? false : true);
             }
 
         }
@@ -144,19 +146,21 @@ public class PostInfoServiceImpl implements PostInfoService {
     public Result giveLike(int userid, int postid) {
         Integer gitcount =0;
         //判断是否点赞
-        if (getParamer(userid,userid)){
+        if (IsLike(userid)){
            try {
                //点赞
-               zSetOperations.add(USER_ID + userid, userid + "", System.currentTimeMillis());
+               zSetOperations.add(BLOG_POST_LIKE + userid, userid + "", System.currentTimeMillis());
                //总量加1
-               gitcount  = (Integer) redisTemplate.opsForValue().get(GIVE_LIKE+postid);
+               gitcount  = (Integer) redisTemplate.opsForValue().get(BLOG_POST_COUNT_LIKE+postid);
                if (gitcount == null){
                    gitcount = 0;
                }
-               redisTemplate.opsForValue().set(GIVE_LIKE+postid, gitcount+1);
+               redisTemplate.opsForValue().set(BLOG_POST_COUNT_LIKE+postid, gitcount+1);
            } catch (Exception e){
                return Result.error(ErroMsg.BIND_ERROR);
            }
+        } else {
+            return Result.error(ErroMsg.LIKE__REPEAT_ERROR);
         }
         return Result.success(gitcount);
     }
@@ -165,44 +169,25 @@ public class PostInfoServiceImpl implements PostInfoService {
     public Result unGiveLike(int userid, int postid) {
         Integer gitcount = 0;
         //判断是否点赞
-        if (!getParamer(userid,postid)){
+        if (!IsLike(userid)){
             try {
                 //取消点赞
-                zSetOperations.remove(USER_ID + userid, userid);
+                zSetOperations.remove(BLOG_POST_LIKE + userid, userid);
                 //总量减1
-                gitcount  = (Integer) redisTemplate.opsForValue().get(GIVE_LIKE+postid);
-                redisTemplate.opsForValue().set(GIVE_LIKE+postid, gitcount-1);
+                gitcount  = (Integer) redisTemplate.opsForValue().get(BLOG_POST_COUNT_LIKE+postid);
+                redisTemplate.opsForValue().set(BLOG_POST_COUNT_LIKE+postid, gitcount-1);
             } catch (Exception e){
                 log.info("redis遇见错误" + e);
                 return Result.error(ErroMsg.BIND_ERROR);
             }
+        } else {
+            return Result.error(ErroMsg.LIKE__REPEAT_ERROR);
         }
         return Result.success(gitcount);
     }
-    //遍历出所以评论
-    public List<CommentInfoDto> getChildren(List<CommentInfoDto> commentInfoDtos){
-        List<CommentInfoDto> dtoList = new ArrayList<>();
-        for (CommentInfoDto commentInfoDto:commentInfoDtos){
-            //父评论为0是第一条
-            if (commentInfoDto.getParentId() == GlobalnumInfo.NO_ASABLE.Key){
-                List<CommentInfoDto> commentInfoDtos1 = new ArrayList<>();
-                for (int i = 0;i <commentInfoDtos.size();i++){
-                    if(commentInfoDto.getId().equals(commentInfoDtos.get(i).getParentId())){
-                        commentInfoDtos1.add(commentInfoDtos.get(i));
-                    }
-                }
-                commentInfoDto.setChildren(commentInfoDtos1);
-                dtoList.add(commentInfoDto);
-            }
-        }
-        return  dtoList;
-    }
-
-
-
     //校验参数
-    public boolean getParamer(int userid, int postid){
-        return redisTemplate.opsForHash().get(userid,postid) == null;
+    public boolean IsLike(int userid){
+        return zSetOperations.zCard(BLOG_POST_LIKE + userid) == null ? false : true;
     }
 
 }

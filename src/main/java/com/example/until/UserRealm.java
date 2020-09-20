@@ -1,5 +1,6 @@
 package com.example.until;
 
+import com.example.bean.LoginInfo;
 import com.example.service.LoginInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
@@ -22,6 +23,7 @@ import org.springframework.util.StringUtils;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 public class UserRealm extends AuthorizingRealm {
@@ -57,12 +59,9 @@ public class UserRealm extends AuthorizingRealm {
         if (StringUtils.isEmpty(usernamePasswordToken.getPassword())){
             throw new UnknownAccountException("密码不能为空");
         }
-        List list =  loginInfoService.seachByUsername(usernamePasswordToken.getUsername());
-        if (list.size() > 1){
-            throw new IncorrectCredentialsException("用户名重复");
-        }
-        if (list.size() == 0){
-            throw new IncorrectCredentialsException("用户不存在");
+        LoginInfo loginInfo =  loginInfoService.selectByUserName(usernamePasswordToken.getUsername());
+        if (Objects.isNull(loginInfo)){
+            throw new NullPointerException("该用户没有注册");
         }
         usernamePasswordToken.setRememberMe(true);
         return new SimpleAuthenticationInfo(usernamePasswordToken,usernamePasswordToken.getPassword(),getName());
