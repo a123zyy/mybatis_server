@@ -17,7 +17,7 @@ public interface PostInfoService {
 
     int insertSelective(PostInfo record);
 
-    PostInfoDto findOnePostInfo(Integer id, String uid);
+    PostInfoDto findOnePostInfo(int id,int uid);
 
     PostInfo selectByPrimaryKey(int id);
 

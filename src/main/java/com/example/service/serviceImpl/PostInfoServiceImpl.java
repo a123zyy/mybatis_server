@@ -10,6 +10,7 @@ import com.example.dao.PostInfoMapper;
 import com.example.pojo.CommentInfoDto;
 import com.example.pojo.PostInfoDto;
 import com.example.service.CommentInfoService;
+import com.example.service.PostInfoCaCheService;
 import com.example.service.PostInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.GlobalnumInfo;
@@ -46,27 +47,20 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Resource
     private PostInfoMapper postInfoMapper;
 
-    @Autowired
-    private RedisUtil redisUtil;
-    @Autowired
-    private RedisTemplate redisTemplate;
+
     @Autowired
     private LabelInfoMapper labelInfoMapper;
     @Autowired
     private CommentInfoMapper commentInfoMapper;
 
     @Autowired
+    private PostInfoCaCheService postInfoCaCheService;
+
+    @Autowired
     private CommentInfoService commentInfoService;
 
-    public static final String BLOG_POST_COUNT_LIKE = "blog_post_count_like:like_num";
-
-    public static final String BLOG_POST_LIKE = "blog_post_like:user_id";
 
 
-
-
-    @Resource(name = "redisTemplate")
-    private ZSetOperations<String, String> zSetOperations;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -84,7 +78,7 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
 
     @Override
-    public PostInfoDto findOnePostInfo(Integer id,String uid) {
+    public PostInfoDto findOnePostInfo(int id,int uid) {
         PostInfo postInfo = postInfoMapper.selectByPrimaryKey(1);
         PostInfoDto postInfoDto =new PostInfoDto();
         BeanUtils.copyProperties(postInfo,postInfoDto);
@@ -94,10 +88,7 @@ public class PostInfoServiceImpl implements PostInfoService {
             postInfoDto.setLabelName(labelInfo.getLable());
             //根据postid查出所有的评论list
             postInfoDto.setCommentInfoDtos(commentInfoService.findAllByPostId(postInfoDto.getId()));
-            if (Objects.nonNull(uid)) {
-                postInfoDto.setLike(zSetOperations.zCard(BLOG_POST_LIKE + uid) == null ? false : true);
-            }
-
+            postInfoDto.setLike(postInfoCaCheService.getIsLike(uid));
         }
         return postInfoDto;
     }
@@ -144,50 +135,12 @@ public class PostInfoServiceImpl implements PostInfoService {
 
     @Override
     public Result giveLike(int userid, int postid) {
-        Integer gitcount =0;
-        //判断是否点赞
-        if (IsLike(userid)){
-           try {
-               //点赞
-               zSetOperations.add(BLOG_POST_LIKE + userid, userid + "", System.currentTimeMillis());
-               //总量加1
-               gitcount  = (Integer) redisTemplate.opsForValue().get(BLOG_POST_COUNT_LIKE+postid);
-               if (gitcount == null){
-                   gitcount = 0;
-               }
-               redisTemplate.opsForValue().set(BLOG_POST_COUNT_LIKE+postid, gitcount+1);
-           } catch (Exception e){
-               return Result.error(ErroMsg.BIND_ERROR);
-           }
-        } else {
-            return Result.error(ErroMsg.LIKE__REPEAT_ERROR);
-        }
-        return Result.success(gitcount);
+        return Result.success(postInfoCaCheService.giveLike(userid,postid));
     }
 
     @Override
     public Result unGiveLike(int userid, int postid) {
-        Integer gitcount = 0;
-        //判断是否点赞
-        if (!IsLike(userid)){
-            try {
-                //取消点赞
-                zSetOperations.remove(BLOG_POST_LIKE + userid, userid);
-                //总量减1
-                gitcount  = (Integer) redisTemplate.opsForValue().get(BLOG_POST_COUNT_LIKE+postid);
-                redisTemplate.opsForValue().set(BLOG_POST_COUNT_LIKE+postid, gitcount-1);
-            } catch (Exception e){
-                log.info("redis遇见错误" + e);
-                return Result.error(ErroMsg.BIND_ERROR);
-            }
-        } else {
-            return Result.error(ErroMsg.LIKE__REPEAT_ERROR);
-        }
-        return Result.success(gitcount);
-    }
-    //校验参数
-    public boolean IsLike(int userid){
-        return zSetOperations.zCard(BLOG_POST_LIKE + userid) == null ? false : true;
+        return Result.success(postInfoCaCheService.unGiveLike(userid,postid));
     }
 
 }

@@ -12,6 +12,7 @@ import com.example.until.ErroMsg;
 import com.example.until.GlobalUntil;
 import com.example.until.GlobalnumInfo;
 
+import com.example.until.JwtTokenUtil;
 import com.example.until.Result;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +38,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -50,6 +53,8 @@ public class PostInfoController {
     public LabelInfoService labelInfoService;
     @Autowired
     public CommentInfoService commentInfoService;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping(value = "/posts", method = RequestMethod.GET)
     @ApiOperation(value = "倒叙获得所有帖子", tags = {"倒叙获得所有帖子copy"}, notes = "分页必传")
@@ -77,7 +82,12 @@ public class PostInfoController {
     @RequestMapping(value = "/List/Oneid", method = RequestMethod.GET)
     public Result PostInfoByOneid(HttpServletRequest httpServletRequest){
                 //根据userid 查询标签总数 第一条帖子和评论
-        return Result.success(postInfoService.findOnePostInfo(1,httpServletRequest.getHeader("uid")));
+        int uid = 0;
+        String token = httpServletRequest.getHeader("token");
+        if (!StringUtils.isEmpty(token)){
+            uid = jwtTokenUtil.getUseridFromToken(token);
+        }
+        return Result.success(postInfoService.findOnePostInfo(1,uid));
     }
 
     @RequestMapping(value = "/List/{labelId}", method = RequestMethod.GET)
@@ -103,26 +113,50 @@ public class PostInfoController {
     }
 
     /**
-     * @param userid
+     * @param servletRequest
      * @param postid
      * @return Result
      *
      * */
     @RequestMapping(value = "/likes", method = RequestMethod.GET)
-    @ApiOperation(value = "根据用户id和帖子id点赞", tags = {"倒叙获得所有帖子copy"}, notes = "参数必传")
-    public Result giveLike(int userid,int postid){
-       return Result.success(postInfoService.giveLike(userid,postid));
+    @ApiOperation(value = "点赞", tags = {"倒叙获得所有帖子copy"}, notes = "参数必传")
+    public Result giveLike(HttpServletRequest servletRequest,int postid){
+        String token = servletRequest.getHeader("token");
+        if (StringUtils.isEmpty(token)){
+            Result.error(ErroMsg.USER__LOGIN_ERROR);
+        }
+        int uid = jwtTokenUtil.getUseridFromToken(token);
+
+        return Result.success(postInfoService.giveLike(uid,postid));
     }
     /**
-     * @param userid
+     * @param servletRequest
      * @param postid
      * @return Result
      *
      * */
     @RequestMapping(value = "/likes", method = RequestMethod.PATCH)
-    @ApiOperation(value = "根据用户id和帖子id取消点赞", tags = {"倒叙获得所有帖子copy"}, notes = "参数必传")
-    public Result unGiveLike(int userid,int postid){
-        return Result.success(postInfoService.unGiveLike(userid,postid));
+    @ApiOperation(value = "取消点赞", tags = {"倒叙获得所有帖子copy"}, notes = "参数必传")
+    public Result unGiveLike(HttpServletRequest servletRequest,int postid){
+        String token = servletRequest.getHeader("token");
+        if (StringUtils.isEmpty(token)){
+            Result.error(ErroMsg.USER__LOGIN_ERROR);
+        }
+        int uid = jwtTokenUtil.getUseridFromToken(token);
+        return Result.success(postInfoService.unGiveLike(uid,postid));
+    }
+
+    @GetMapping(value = "/postinfosBycreateTime")
+    public Result getPostinfoBycreateTime(){
+        List<PostInfoDto> postInfos = postInfoService.finAll().stream().map(item->{
+            PostInfoDto postInfoDto =new PostInfoDto();
+            BeanUtils.copyProperties(item,postInfoDto);
+            postInfoDto.setTime(GlobalUntil.dateFormat(item.getCreateTime()));
+            return postInfoDto;
+        }).collect(Collectors.toList());
+        Map<String, List<PostInfoDto>> postInfoDtoMap = postInfos.stream().collect(Collectors.groupingBy(PostInfoDto::getTime));
+
+        return Result.success(postInfoDtoMap);
     }
 
 

@@ -1,20 +1,22 @@
 package com.example.demo;
 
 import com.example.bean.HobbyInfo;
+import com.example.bean.PostInfo;
+import com.example.pojo.PostInfoDto;
+import com.example.service.PostInfoService;
+import com.example.until.GlobalUntil;
+import com.example.until.JwtTokenUtil;
 import com.example.until.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 class MybatisServerApplicationTests {
@@ -24,6 +26,16 @@ class MybatisServerApplicationTests {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private PostInfoService postInfoService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    private String REDIS_BLOG_POST_COUNT_LIKE="blog:post:like_count";
+
+
 
     @Test
     void contextLoads() {
@@ -40,8 +52,9 @@ class MybatisServerApplicationTests {
     @Test
     void contextLoads11() {
         //int[] nums = new int[]{-10,-3,0,5,9};
+        testIterator();
 
-        System.out.println( redisUtil.get("give_like1"));
+       // System.out.println();
 
 //        //System.out.println(arraysToTree(nums));
 //        Integer integer = (Integer) redisTemplate.opsForValue().get("ket2");
@@ -51,11 +64,20 @@ class MybatisServerApplicationTests {
 
     @Test
     void contextLoads12() {
+//        twoArray();
 
-        double[] nums = new double[]{3.5,5,3,3.5,2.2,1.9,2};
+        List<String> list = new ArrayList<>();
+        list.add("呜呜呜");
+        list.add("hhhh");
+        list.add("呱呱呱");
+        Stream.Builder<String> streamBuilder = Stream.builder();
+        list.stream();
+        System.out.println(streamBuilder.build().collect(Collectors.joining(",")));
+
+        //double[] nums = new double[]{3.5,5,3,3.5,2.2,1.9,2};
 //        Arrays.sort(nums);
 //        Arrays.binarySearch(nums,);
-        threeSumClosest();
+        //threeSumClosest();
 //        System.out.println((int) );
 //        for (double a:nums){
 //            System.out.println(a);
@@ -357,6 +379,75 @@ class MybatisServerApplicationTests {
         ListNode next;
         ListNode(int x) { val = x; }
     }
+
+    public void testIterator(){
+//        Set set =new HashSet();
+//        set.add("1");
+//        set.add("2");
+//        set.add("3");
+//        set.add("4");
+//        set.add("5");
+//        set.add("6");
+//        Iterator<String> iterator = set.iterator();
+//        while (iterator.hasNext()){
+//            System.out.println(iterator.next().toLowerCase()+"");
+//        }
+        //向后遍历链表
+        LinkedList<Integer> linkedList = new LinkedList<Integer>();
+        linkedList.add(0);
+        linkedList.add(1);
+        linkedList.add(2);
+        linkedList.add(3);
+        linkedList.add(4);
+        linkedList.add(5);
+        System.out.println(linkedList.size());
+        for (int i =linkedList.size()-1 ;i >=0;i--){
+            System.out.println(linkedList.get(i));
+        }
+//        Collections.binarySearch()
+    }
+    //二维数组
+    public final void twoArray(){
+        int [][] mat =new int[10][10];
+        for (int row =0;row<mat.length;row++){
+            for (int clunm =0;clunm<mat[row].length;clunm++){
+                mat[row][row] = (int) (Math.random()*100);
+            }
+        }
+        for (int row = 0;row < mat.length;row ++ ){
+            for (int column = 0; column<mat[row].length;column++){
+                System.out.print(mat[row][column]+" ");
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    void getuser(){
+//       String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjEsImNyZWF0ZWQiOjE2MDIzMjI3MDE1ODUsImV4cCI6MTYwMjkyNzUwMX0.5cIaw5ZgSnakUM9PFqCcQHg_Ad5OcnbHHGSVU05Tr7QPUKYYZt2LL3n6xhHztJ8Ic502Yec2zjijOR11Ydy5Gg";
+//        System.out.println(jwtTokenUtil.getUseridFromToken(token));
+        int aa =4;
+             redisTemplate.opsForValue().set(REDIS_BLOG_POST_COUNT_LIKE+1, 4-1);
+
+
+
+    }
+
+    @Test
+    void getuser1(){
+//       String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjEsImNyZWF0ZWQiOjE2MDIzMjI3MDE1ODUsImV4cCI6MTYwMjkyNzUwMX0.5cIaw5ZgSnakUM9PFqCcQHg_Ad5OcnbHHGSVU05Tr7QPUKYYZt2LL3n6xhHztJ8Ic502Yec2zjijOR11Ydy5Gg";
+//        System.out.println(jwtTokenUtil.getUseridFromToken(token));
+
+        Integer gitcount = (Integer) redisTemplate.opsForValue().get(REDIS_BLOG_POST_COUNT_LIKE+1);
+        System.out.println(gitcount);
+
+
+
+    }
+
+
+
+
+
 }
 
 

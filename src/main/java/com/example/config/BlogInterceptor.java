@@ -27,11 +27,11 @@ public class BlogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        if (request.getServletPath().equals("/web/PostInfo/likes") || request.getServletPath().equals("/web/CommentInfo/CommentInfo") || request.getServletPath().equals("/web/PostInfo/List/Oneid")) {
-            if (null == request.getHeader("token") || null == request.getHeader("uid")) {
-               throw new Error();
-            }
-        }
+//        if (request.getServletPath().equals("/web/PostInfo/likes") || request.getServletPath().equals("/web/CommentInfo/CommentInfo") || request.getServletPath().equals("/web/PostInfo/List/Oneid")) {
+//            if (null == request.getHeader("token") || null == request.getHeader("uid")) {
+//               throw new Error();
+//            }
+//        }
         return true;
     }
 

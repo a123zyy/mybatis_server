@@ -8,6 +8,7 @@ import com.example.service.UserInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.GlobalUntil;
 import com.example.until.GlobalnumInfo;
+import com.example.until.JwtTokenUtil;
 import com.example.until.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -47,6 +48,8 @@ public class LoginController {
     public UserInfoService userInfoService;
     @Autowired
     public LoginInfoService loginInfoService;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public Result getLogin(@RequestBody LoginDto loginDto){
@@ -91,11 +94,11 @@ public class LoginController {
         int update = loginInfoService.updateByPrimaryKeySelective(loginInfo);
         Map<String,Object> userMap =new HashMap<>();
         if (update > 0){
-            userMap.put("token", GlobalUntil.getUUID());
-            userMap.put("userInfo",userInfoService.selectByPrimaryKey(list.getUserid()));
+            UserInfo userInfo =  userInfoService.selectByPrimaryKey(list.getUserid());
+            userMap.put("token", jwtTokenUtil.generateToken(userInfo));
+            userMap.put("userInfo",userInfo);
             return Result.success(userMap);
         }
-
         return Result.error(ErroMsg.REDIS_NULL_ERROR);
     }
     //注册

@@ -48,6 +48,7 @@ public class UserInfoController {
     public PostInfoService postInfoService;
     @Autowired
     public CommentInfoService commentInfoService;
+    private double rad =1.0;
 
 
     /**
@@ -90,6 +91,9 @@ public class UserInfoController {
         }
      return Result.success(userInfoService.deleteByPrimaryKey(Integer.parseInt(httpServletRequest.getHeader("uid"))));
     }
+
+
+
 
 
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.IntSummaryStatistics;
+import java.util.LinkedList;
 import java.util.List;
 
 @SpringBootTest
@@ -58,8 +60,12 @@ public class Test2 {
 //
 //        IntSummaryStatistics stats = numbers.stream().mapToInt((x) -> x).summaryStatistics();
         //this.getCalendar(2020, 8);
+        //System.out.println(114/6);
+//        String a ="cbbd";
+//        System.out.println("a".hashCode());
+        setString(34);
 
-        System.out.println( reverse(654));
+        //System.out.println( ispramary("remoom"));
 
     }
 
@@ -121,6 +127,8 @@ public class Test2 {
         return utilDate;
     }
     public static int reverse(int num){
+       ArrayList<String>[] list =(ArrayList<String>[])new ArrayList[10];
+
         int newnumber=0;
         do
         {
@@ -129,4 +137,109 @@ public class Test2 {
         }while(num>0);
         return newnumber;
     }
+    //判断回文
+    public boolean ispramary(String s){
+        int low = 0;
+        int high = s.length()-1;
+        while (low<high){
+            if (s.charAt(low)!= s.charAt(high)){
+                return false;
+            }
+            low++;
+            high--;
+
+        }
+        return true;
+    }
+    //判断回文数
+    public static boolean isPalindrome(String s){
+        String s1 =filter(s);
+        String s2 =reverse(s1);
+        return s2.equals(s1);
+    }
+    public  static  String filter(String s){
+        StringBuilder stringBuilder =new StringBuilder();
+        for (int i =0;i<s.length();i++){
+            if (Character.isLetterOrDigit(s.charAt(i))){
+                stringBuilder.append(s.charAt(i));
+            }
+        }
+        return stringBuilder.toString();
+    }
+    public static String reverse(String s){
+        StringBuilder stringBuilder =new StringBuilder(s);
+        stringBuilder.reverse();
+        return stringBuilder.toString();
+    }
+    //判断最长回文
+    public String getparamer(String s){
+        if (null == s){return s;}
+        if (s.length() == 1){return s;}
+        int low = 0;
+        int hight = s.length()-1;
+        String heiwen ="";
+        while (low<hight){
+            if (low  == hight){
+                low++;
+                hight = s.length()-1;
+            }
+            if (s.charAt(low) == s.charAt(hight)){
+                System.out.println(s.charAt(low));
+                System.out.println(s.charAt(hight));
+                heiwen+= s.charAt(low);
+                low++;
+                hight--;
+            } else {
+                hight--;
+                heiwen ="";
+
+            }
+
+        }
+        StringBuilder stringBuilder =new StringBuilder(heiwen);
+        return heiwen+stringBuilder.reverse();
+    }
+        //动态规划算法
+        public String longestPalindrome(String s) {
+            int n = s.length();
+            boolean[][] dp = new boolean[n][n];
+            String ans = "";
+            for (int l = 0; l < n; ++l) {
+                for (int i = 0; i + l < n; ++i) {
+                    int j = i + l;
+                    if (l == 0) {
+                        dp[i][j] = true;
+                    } else if (l == 1) {
+                        dp[i][j] = (s.charAt(i) == s.charAt(j));
+                    } else {
+                        dp[i][j] = (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]);
+                    }
+                    if (dp[i][j] && l + 1 > ans.length()) {
+                        ans = s.substring(i, i + l + 1);
+                    }
+                }
+            }
+            return ans;
+        }
+        public void setString(int aaa){
+            try {
+                int[] newarray = this.createArry();
+                System.out.println("下表为"+aaa+"的值"+newarray[aaa]);
+            } catch (ArrayIndexOutOfBoundsException a){
+                System.out.println("数组下标越界");
+            }
+
+        }
+        public int[] createArry(){
+            BigInteger integer = new BigInteger("21345675432125632454656");
+            int[] array = new int[100];
+            for (int i = 0;i<array.length;i++){
+                array[i] = (int) (Math.random()*100)+1;
+            }
+            return array;
+        }
+
+
+
+
 }

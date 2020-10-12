@@ -58,7 +58,9 @@ public class ErroMsg extends Throwable {
     public static ErroMsg possword_SHORT_ERROR = new ErroMsg(5002124, "密码太短了");
     public static ErroMsg PARAMER_NULL_ERROR = new ErroMsg(5002125, "参数为null");
     public static ErroMsg PARAMER_LENGTH_ERROR = new ErroMsg(5002126, "参数过长了");
-    public static ErroMsg LIKE__REPEAT_ERROR = new ErroMsg(5002126, "重复动作");
+    public static ErroMsg LIKE__REPEAT_ERROR = new ErroMsg(5002127, "重复动作");
+    public static ErroMsg USER__LOGIN_ERROR = new ErroMsg(5002128, "用户未登录");
+
 
 
 
