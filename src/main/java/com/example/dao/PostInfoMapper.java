@@ -23,5 +23,7 @@ public interface PostInfoMapper {
 
     List<PostInfo> findAll();
 
+    List<PostInfo> findAllByYear();
+
     List<PostInfo> findAllByStatusAndLabelId(@Param("status") int status, @Param("labelId") int labelId);
 }

@@ -6,6 +6,7 @@
     <!--@Table comment_info-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="parent_uid" jdbcType="INTEGER" property="parentUid" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
     <result column="post_id" jdbcType="INTEGER" property="postId" />
@@ -16,8 +17,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, parent_id, comment_content, post_id, comment_name, comment_head, `status`, 
-    create_time
+    id, user_id, parent_uid, parent_id, comment_content, post_id, comment_name, comment_head, 
+    `status`, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -33,12 +34,14 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.bean.CommentInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into comment_info (user_id, parent_id, comment_content, 
-      post_id, comment_name, comment_head, 
-      `status`, create_time)
-    values (#{userId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{commentContent,jdbcType=VARCHAR}, 
-      #{postId,jdbcType=INTEGER}, #{commentName,jdbcType=VARCHAR}, #{commentHead,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT})
+    insert into comment_info (user_id, parent_uid, parent_id, 
+      comment_content, post_id, comment_name, 
+      comment_head, `status`, create_time
+      )
+    values (#{userId,jdbcType=INTEGER}, #{parentUid,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, 
+      #{commentContent,jdbcType=VARCHAR}, #{postId,jdbcType=INTEGER}, #{commentName,jdbcType=VARCHAR}, 
+      #{commentHead,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.bean.CommentInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -46,6 +49,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="parentUid != null">
+        parent_uid,
       </if>
       <if test="parentId != null">
         parent_id,
@@ -72,6 +78,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="parentUid != null">
+        #{parentUid,jdbcType=INTEGER},
       </if>
       <if test="parentId != null">
         #{parentId,jdbcType=INTEGER},
@@ -103,6 +112,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
+      <if test="parentUid != null">
+        parent_uid = #{parentUid,jdbcType=INTEGER},
+      </if>
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=INTEGER},
       </if>
@@ -131,6 +143,7 @@
     <!--@mbg.generated-->
     update comment_info
     set user_id = #{userId,jdbcType=INTEGER},
+      parent_uid = #{parentUid,jdbcType=INTEGER},
       parent_id = #{parentId,jdbcType=INTEGER},
       comment_content = #{commentContent,jdbcType=VARCHAR},
       post_id = #{postId,jdbcType=INTEGER},

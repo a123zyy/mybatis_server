@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.bean.HobbyInfo;
 import com.example.bean.PostInfo;
+import com.example.dao.PostInfoMapper;
 import com.example.pojo.PostInfoDto;
 import com.example.service.PostInfoService;
 import com.example.until.GlobalUntil;
@@ -28,7 +29,7 @@ class MybatisServerApplicationTests {
     private RedisUtil redisUtil;
 
     @Autowired
-    private PostInfoService postInfoService;
+    private PostInfoMapper postInfoMapper;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -40,6 +41,15 @@ class MybatisServerApplicationTests {
     @Test
     void contextLoads() {
         System.out.println(getRandomHan());
+    }
+
+    @Test
+    void contextLoads2() {
+       List<PostInfo> list = postInfoMapper.findAllByYear();
+       for (int i=0;i>list.size();i++){
+           System.out.println(list.get(i));
+       }
+
     }
 
     private final static int DATA = 0x9fa5 - 0x4e00 + 1;

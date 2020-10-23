@@ -147,10 +147,13 @@
         select * from post_info where status = #{status,jdbcType=INTEGER} order by create_time desc
     </select>
     <select id="findAll" resultMap="BaseResultMap">
-        select * from post_info
+        select * from post_info order by create_time desc
     </select>
     <select id="findAllByStatusAndLabelId" resultMap="BaseResultMap">
         select * from post_info where status = #{status,jdbcType=INTEGER} and label_id = #{labelId,jdbcType=INTEGER}
+    </select>
+    <select id="findAllByYear" resultMap="BaseResultMap">
+        select * from post_info group by create_time
     </select>
 
 </mapper>

@@ -13,6 +13,8 @@ public class CommentInfoDto extends CommentInfo {
     @JsonIgnore
     private Integer status;
 
+    private String parentName;
+
     private List<CommentInfoDto> children;
 
 

@@ -21,7 +21,7 @@ public interface CommentInfoService {
      * @param parentId
      * @return int
      * */
-    Result insertSelective(int postId,String commentContent,int parentId,int userId);
+    Result insertSelective(int postId,String commentContent,int parentId,int parentUid,int userId);
 
     CommentInfo selectByPrimaryKey(Integer id);
 

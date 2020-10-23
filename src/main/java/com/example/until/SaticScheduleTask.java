@@ -28,9 +28,10 @@ public class SaticScheduleTask {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    public static final String GIVE_LIKE = "give_like";
+    private String REDIS_BLOG_POST_COUNT_LIKE="blog:post:like_count";
 
-     @Scheduled(cron = "0 0 0/1 * * ?")
+
+    @Scheduled(cron = "0 0/1 0 * * ?")
     //每两秒执行一次
     public void redisDataToMySQL() {
         DateTimeFormatter dateTimeFormatter= DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss");
@@ -41,7 +42,7 @@ public class SaticScheduleTask {
         //1.更新文章总的点赞数
         List<PostInfo> postInfos =  postInfoMapper.findAll();
         postInfos.stream().map(item->{
-            Object likeCount = redisTemplate.opsForValue().get(GIVE_LIKE+item.getId());
+            Object likeCount = redisTemplate.opsForValue().get(REDIS_BLOG_POST_COUNT_LIKE+item.getId());
             if (Objects.nonNull(likeCount)){
                 item.setLikeCount(likeCount.toString());
             }

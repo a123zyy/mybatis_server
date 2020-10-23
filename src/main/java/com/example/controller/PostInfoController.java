@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -58,9 +60,16 @@ public class PostInfoController {
 
     @RequestMapping(value = "/posts", method = RequestMethod.GET)
     @ApiOperation(value = "倒叙获得所有帖子", tags = {"倒叙获得所有帖子copy"}, notes = "分页必传")
-    public Result getPostList(int pageSize, int pageNum){
-        PageHelper.startPage(pageNum, pageSize);
-        List<PostInfo> postInfos = postInfoService.findAllByStatus(GlobalnumInfo.IS_ASABLE.Key);
+    public Result getPostList(int pageSize, int pageNum,int labelId){
+        List<PostInfo> postInfos=new ArrayList<>();
+        if (labelId != GlobalnumInfo.NO_ASABLE.Key){
+            PageHelper.startPage(pageNum, pageSize);
+             postInfos=  postInfoService.findAllByStatusAndLabelId(GlobalnumInfo.IS_ASABLE.Key,labelId);
+        } else {
+            PageHelper.startPage(pageNum, pageSize);
+            postInfos = postInfoService.findAllByStatus(GlobalnumInfo.IS_ASABLE.Key);
+
+        }
         List<PostInfoDto> postInfoDtos = postInfos.stream().map(item->{
             PostInfoDto postInfoDto = new PostInfoDto();
             BeanUtils.copyProperties(item,postInfoDto);
@@ -135,7 +144,7 @@ public class PostInfoController {
      * @return Result
      *
      * */
-    @RequestMapping(value = "/likes", method = RequestMethod.PATCH)
+    @PatchMapping(value = "/likes")
     @ApiOperation(value = "取消点赞", tags = {"倒叙获得所有帖子copy"}, notes = "参数必传")
     public Result unGiveLike(HttpServletRequest servletRequest,int postid){
         String token = servletRequest.getHeader("token");
@@ -151,12 +160,36 @@ public class PostInfoController {
         List<PostInfoDto> postInfos = postInfoService.finAll().stream().map(item->{
             PostInfoDto postInfoDto =new PostInfoDto();
             BeanUtils.copyProperties(item,postInfoDto);
-            postInfoDto.setTime(GlobalUntil.dateFormat(item.getCreateTime()));
+            //postInfoDto.setTime(GlobalUntil.year(item.getCreateTime()));
+            postInfoDto.setYear(GlobalUntil.year(item.getCreateTime()));
             return postInfoDto;
         }).collect(Collectors.toList());
-        Map<String, List<PostInfoDto>> postInfoDtoMap = postInfos.stream().collect(Collectors.groupingBy(PostInfoDto::getTime));
+//        List<PostInfo> postInfos = postInfoService.finAll();
+//        List<PostInfoDto> postInfoDtos = postInfos.stream().map(item->{
+//
+//        }).collect(Collectors.toList());
 
+
+        Map<String, List<PostInfoDto>> postInfoDtoMap = postInfos.stream().collect(Collectors.groupingBy(PostInfoDto::getYear));
+
+
+//        LinkedHashMap<String,List<PostInfoDto>> map = postInfoDtoMap.entrySet().stream()
+//                .sorted(Map.Entry.comparingByKey()).collect(Collectors
+//                .toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue,
+//                        LinkedHashMap::new));
         return Result.success(postInfoDtoMap);
+    }
+
+    @GetMapping(value = "/getPostById")
+    @ApiOperation(value = "根据文章id获取文章及评论", tags = {"根据文章id获取文章及评论"})
+    public Result getPostById(int postId,HttpServletRequest httpServletRequest){
+        int uid = 0;
+        String token = httpServletRequest.getHeader("token");
+        if (!StringUtils.isEmpty(token)){
+            uid = jwtTokenUtil.getUseridFromToken(token);
+        }
+        PostInfoDto postInfoDto = postInfoService.findOnePostInfo(postId,uid);
+        return Result.success(postInfoDto);
     }
 
 

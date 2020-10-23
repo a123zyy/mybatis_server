@@ -14,21 +14,21 @@ public interface PostInfoCaCheService {
      * @param uid
      * @return
      */
-    Boolean getIsLike(int uid);
+    Boolean getIsLike(int uid,int postId);
 
     /**
      * 用户给文章点赞并返回文章点赞总量
-     * @param userid,postid
+     * @param userId,postid
      * @return
      */
-    int giveLike(int userid, int postid);
+    int giveLike(int userId, int postId);
 
     /**
      * 用户给文章取消点赞并返回文章点赞总量
-     * @param userid,postid
+     * @param userId,postId
      * @return
      */
-    int unGiveLike(int userid, int postid);
+    int unGiveLike(int userId, int postId);
 
 
 }

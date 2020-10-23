@@ -5,6 +5,7 @@ import com.example.bean.CommentInfo;
 import com.example.service.CommentInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.GlobalnumInfo;
+import com.example.until.JwtTokenUtil;
 import com.example.until.Result;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class CommentInfoController {
     @Autowired
     public CommentInfoService commentInfoService;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
 
     /**
      * 回复评论
@@ -34,12 +38,14 @@ public class CommentInfoController {
      * @param parentId
      * @return Result
      * */
-    @RequestMapping(value = "/CommentInfo",method = RequestMethod.GET)
-    public Result addCommentInfo(int postId, String commentContent, int parentId, HttpServletRequest httpServletRequest){
-        if (null == httpServletRequest.getHeader("uid")){
+    @RequestMapping(value = "/addCommentInfo",method = RequestMethod.GET)
+    public Result addCommentInfo(int postId, String commentContent, int parentId,int parentUid,HttpServletRequest httpServletRequest){
+        String token = httpServletRequest.getHeader("token");
+        if (null == token){
             return Result.error(ErroMsg.PRIMARY_ERROR);
         }
-        return Result.success( commentInfoService.insertSelective(postId,commentContent,parentId,Integer.parseInt(httpServletRequest.getHeader("uid"))));
+        int uid = jwtTokenUtil.getUseridFromToken(token);
+        return Result.success( commentInfoService.insertSelective(postId,commentContent,parentId,parentUid,uid));
     }
 
     /**

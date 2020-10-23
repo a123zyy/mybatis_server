@@ -17,11 +17,17 @@ public class PostInfoDto extends PostInfo {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @ApiParam(value = "评论总数")
     private int commentCount;
-    @ApiParam(value = "评论总数")
+    @ApiParam(value = "点赞总数")
     private String likeCount;
 
     @ApiParam(value = "是否评论")
     private boolean isLike;
+
+
+    @ApiParam(value = "归档需要用到的年")
+    private String year;
+
+
 
     private String time;
 }

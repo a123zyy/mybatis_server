@@ -35,16 +35,22 @@ public class PostInfoCaCheServiceImpl implements PostInfoCaCheService {
 
 
     @Override
-    public Boolean getIsLike(int uid) {
-        return zSetOperations.zCard(REDIS_BLOG_POST_UID_LIKE + uid) == 0 ? false : true;
+    public Boolean getIsLike(int uid,int postId) {
+        long aa = zSetOperations.zCard(REDIS_BLOG_POST_UID_LIKE + uid+"_"+postId);
+        System.out.println("是否点赞"+aa);
+
+        return zSetOperations.zCard(REDIS_BLOG_POST_UID_LIKE + uid+"_"+postId) == 0 ? false : true;
     }
 
     @Override
     public int giveLike(int userid, int postid) {
         //点赞
-        zSetOperations.add(REDIS_BLOG_POST_UID_LIKE + userid, userid + "", System.currentTimeMillis());
+        zSetOperations.add(REDIS_BLOG_POST_UID_LIKE + userid+"_"+postid, postid+"", System.currentTimeMillis());
         //获取文章赞总量
-        Integer gitcount  = (Integer) redisTemplate.opsForValue().get(REDIS_BLOG_POST_COUNT_LIKE+postid)+1;
+        Integer gitcount  = (Integer) redisTemplate.opsForValue().get(REDIS_BLOG_POST_COUNT_LIKE+postid);
+        if (null == gitcount){
+            gitcount =1;
+        }
         //总量+1
         redisTemplate.opsForValue().set(REDIS_BLOG_POST_COUNT_LIKE+postid, gitcount);
         return gitcount;
@@ -53,7 +59,7 @@ public class PostInfoCaCheServiceImpl implements PostInfoCaCheService {
     @Override
     public int unGiveLike(int userid, int postid) {
         //取消点赞
-        zSetOperations.remove(REDIS_BLOG_POST_UID_LIKE + userid, userid);
+       long aaa = zSetOperations.remove(REDIS_BLOG_POST_UID_LIKE + userid+"_"+postid, postid+"");
         Integer gitcount = (Integer) redisTemplate.opsForValue().get(REDIS_BLOG_POST_COUNT_LIKE+postid) -1;
         redisTemplate.opsForValue().set(REDIS_BLOG_POST_COUNT_LIKE+postid, gitcount);
         return gitcount;

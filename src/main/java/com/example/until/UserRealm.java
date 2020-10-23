@@ -63,8 +63,8 @@ public class UserRealm extends AuthorizingRealm {
         if (Objects.isNull(loginInfo)){
             throw new NullPointerException("该用户没有注册");
         }
-        usernamePasswordToken.setRememberMe(true);
-        return new SimpleAuthenticationInfo(usernamePasswordToken,usernamePasswordToken.getPassword(),getName());
+//        usernamePasswordToken.setRememberMe(true);
+        return new SimpleAuthenticationInfo(loginInfo.getUsername(),loginInfo.getPassword(),getName());
     }
 
 

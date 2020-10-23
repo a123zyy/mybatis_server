@@ -79,7 +79,7 @@ public class PostInfoServiceImpl implements PostInfoService {
 
     @Override
     public PostInfoDto findOnePostInfo(int id,int uid) {
-        PostInfo postInfo = postInfoMapper.selectByPrimaryKey(1);
+        PostInfo postInfo = postInfoMapper.selectByPrimaryKey(id);
         PostInfoDto postInfoDto =new PostInfoDto();
         BeanUtils.copyProperties(postInfo,postInfoDto);
         if (!StringUtils.isEmpty(postInfoDto)){
@@ -88,7 +88,8 @@ public class PostInfoServiceImpl implements PostInfoService {
             postInfoDto.setLabelName(labelInfo.getLable());
             //根据postid查出所有的评论list
             postInfoDto.setCommentInfoDtos(commentInfoService.findAllByPostId(postInfoDto.getId()));
-            postInfoDto.setLike(postInfoCaCheService.getIsLike(uid));
+            postInfoDto.setLike(postInfoCaCheService.getIsLike(uid,id));
+            postInfoDto.setCommentCount( commentInfoMapper.findByPostId(id));
         }
         return postInfoDto;
     }

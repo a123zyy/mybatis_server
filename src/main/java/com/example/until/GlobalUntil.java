@@ -56,6 +56,13 @@ public class GlobalUntil {
                 LocalDateTime.ofInstant(instant, ZoneId.systemDefault()));
     }
 
+    public static String year(Date timestamp){
+      return timestamp.getYear()+1900+"";
+//        Instant instant = Instant.ofEpochMilli(timestamp.getTime());
+//       DATE_FORMAT.format(
+//                LocalDateTime.ofInstant(instant, ZoneId.systemDefault())).;
+    }
+
     /**
          * request的全部参数转换成map
          * @param request

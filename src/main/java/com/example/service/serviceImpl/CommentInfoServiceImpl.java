@@ -1,6 +1,7 @@
 package com.example.service.serviceImpl;
 
 import com.example.bean.CommentInfo;
+import com.example.bean.UserInfo;
 import com.example.dao.CommentInfoMapper;
 import com.example.dao.UserInfoMapper;
 import com.example.pojo.CommentInfoDto;
@@ -8,11 +9,13 @@ import com.example.service.CommentInfoService;
 import com.example.until.ErroMsg;
 import com.example.until.GlobalnumInfo;
 import com.example.until.Result;
+import com.github.pagehelper.util.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,8 +42,8 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     }
 
     @Override
-    public Result insertSelective(int postId, String commentContent, int parentId, int userId) {
-        if (StringUtils.isEmpty(postId)){
+    public Result insertSelective(int postId, String commentContent, int parentId,int parentUid, int userId) {
+        if (0 == postId){
             return Result.error(ErroMsg.PARAMER_NULL_ERROR);
         }
         if (StringUtils.isEmpty(commentContent)){
@@ -49,13 +52,12 @@ public class CommentInfoServiceImpl implements CommentInfoService {
         if (commentContent.length() > 150){
             return Result.error(ErroMsg.PARAMER_LENGTH_ERROR);
         }
-        if (StringUtils.isEmpty(userId)){
-            return Result.error(ErroMsg.PARAMER_NULL_ERROR);
-        }
-
         CommentInfo commentInfo =new CommentInfo();
-        commentInfo.setCommentHead(userInfoMapper.selectByPrimaryKey(userId).getAvatar());
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
+        commentInfo.setCommentHead(userInfo.getAvatar());
         commentInfo.setCommentContent(commentContent);
+        commentInfo.setCommentName(userInfo.getNickname());
+        commentInfo.setParentUid(parentUid);
         commentInfo.setUserId(userId);
         commentInfo.setPostId(postId);
         commentInfo.setParentId(parentId);
@@ -91,14 +93,16 @@ public class CommentInfoServiceImpl implements CommentInfoService {
                 .map(item -> {
                     CommentInfoDto commentInfoDto = new CommentInfoDto();
                     BeanUtils.copyProperties(item, commentInfoDto);
+                    commentInfoDto.setParentName(commentInfoDto.getParentUid() == 0 ?null:userInfoMapper.selectByPrimaryKey(commentInfoDto.getParentUid()).getNickname());
                     return commentInfoDto;
                 }).peek(commentInfoDto -> {
                     List<CommentInfoDto> children = commentInfos.stream()
-                            .filter(x -> commentInfoDto.getId().equals(x.getParentId()))
-                            .map(x -> {
+                            .filter(x ->
+                                    commentInfoDto.getId().equals(x.getParentId())).map(x -> {
                                 // 避免循环引用 创建新对象
                                 CommentInfoDto newInfo = new CommentInfoDto();
                                 BeanUtils.copyProperties(x, newInfo);
+                                newInfo.setParentName(newInfo.getParentUid() == 0 ?null:userInfoMapper.selectByPrimaryKey(newInfo.getParentUid()).getNickname());
                                 return newInfo;
                             })
                             .collect(Collectors.toList());
@@ -121,6 +125,7 @@ public class CommentInfoServiceImpl implements CommentInfoService {
     public List<CommentInfo> finAll() {
         return commentInfoMapper.finAll();
     }
+
 
 
 }

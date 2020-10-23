@@ -13,7 +13,12 @@ public class CommentInfo implements Serializable {
     private Integer userId;
 
     /**
-     * 父id
+     * 父uid
+     */
+    private Integer parentUid;
+
+    /**
+     * 父commentid
      */
     private Integer parentId;
 
